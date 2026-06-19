@@ -1,0 +1,290 @@
+// ==================== 数据源 ====================
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ==================== 用户 ====================
+
+enum UserRole {
+  USER
+  EDITOR
+  REVIEWER
+  ADMIN
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String?
+  avatar        String?
+  role          UserRole @default(USER)
+  passwordHash  String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  progress      UserProgress[]
+  favorites     UserFavorite[]
+  evidences     CapabilityEvidence[]
+
+  @@map("users")
+}
+
+model UserProgress {
+  id           String         @id @default(cuid())
+  userId       String
+  nodeId       String
+  status       ProgressStatus @default(NOT_STARTED)
+  completedAt  DateTime?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  user User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  node LearningNode @relation(fields: [nodeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, nodeId])
+  @@map("user_progress")
+}
+
+enum ProgressStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+model UserFavorite {
+  id        String   @id @default(cuid())
+  userId    String
+  sceneId   String
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scene Scene @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, sceneId])
+  @@map("user_favorites")
+}
+
+model CapabilityEvidence {
+  id        String   @id @default(cuid())
+  userId    String
+  nodeId    String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  node LearningNode @relation(fields: [nodeId], references: [id], onDelete: Cascade)
+
+  @@map("capability_evidences")
+}
+
+// ==================== 内容模型 ====================
+
+enum PublishStatus {
+  DRAFT
+  PREVIEW
+  PENDING_REVIEW
+  PUBLISHED
+  OFFLINE
+}
+
+model Scene {
+  id             String        @id @default(cuid())
+  title          String
+  slug           String        @unique
+  summary        String
+  suitableFor    String
+  notSuitableFor String
+  coverImage     String?
+  sortOrder      Int           @default(0)
+  isRecommended  Boolean       @default(false)
+  publishStatus  PublishStatus @default(DRAFT)
+  seoTitle       String?
+  seoDescription String?
+  publishedAt    DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  stages        Stage[]
+  nodes         LearningNode[]
+  toolGuidances ToolGuidance[]
+  taxonomies    SceneTaxonomy[]
+  mediaAssets   MediaAsset[]
+  favorites     UserFavorite[]
+
+  @@map("scenes")
+}
+
+enum StageType {
+  UNDERSTAND
+  HANDS_ON
+  STABLE_PRODUCTION
+  ADVANCE
+}
+
+model Stage {
+  id                  String    @id @default(cuid())
+  sceneId             String
+  stageType           StageType
+  capabilityStd       String
+  learningFocus       String
+  practiceTask        String
+  capabilityEvidence  String
+  aiIntervention      String
+  commonFailure       String?
+  remedialAction      String?
+  sortOrder           Int       @default(0)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  scene Scene          @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+  nodes LearningNode[]
+  toolGuidances ToolGuidance[]
+
+  @@unique([sceneId, stageType])
+  @@map("stages")
+}
+
+model LearningNode {
+  id                  String    @id @default(cuid())
+  stageId            String
+  sceneId            String
+  title              String
+  slug               String
+  objective          String
+  prerequisites      String?
+  whyFirst           String?
+  keyConcepts        String
+  methodFocus        String
+  practiceTask       String
+  commonMistakes     String?
+  passCriteria       String
+  capabilityEvidence String
+  nextNodeId          String?
+  sortOrder          Int       @default(0)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  stage            Stage             @relation(fields: [stageId], references: [id], onDelete: Cascade)
+  scene            Scene             @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+  nextNode         LearningNode?     @relation("NodeChain", fields: [nextNodeId], references: [id])
+  previousNodes    LearningNode[]    @relation("NodeChain")
+  dialogueExamples AiDialogueExample[]
+  toolGuidances    ToolGuidance[]
+  mediaAssets      MediaAsset[]
+  progress         UserProgress[]
+  evidences        CapabilityEvidence[]
+
+  @@unique([sceneId, slug])
+  @@map("learning_nodes")
+}
+
+model AiDialogueExample {
+  id             String   @id @default(cuid())
+  nodeId         String
+  toolChoice     String
+  prompt         String
+  aiFollowUp     String?
+  userSupplement String?
+  aiOutput       String
+  checkList      String
+  sortOrder      Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  node LearningNode @relation(fields: [nodeId], references: [id], onDelete: Cascade)
+
+  @@map("ai_dialogue_examples")
+}
+
+model ToolGuidance {
+  id                 String   @id @default(cuid())
+  sceneId            String
+  stageId            String?
+  nodeId             String?
+  currentTool        String
+  currentToolUsage   String
+  betterTool         String?
+  betterToolUsage    String?
+  migrationTrigger   String?
+  sortOrder          Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  scene Scene           @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+  stage Stage?          @relation(fields: [stageId], references: [id], onDelete: SetNull)
+  node  LearningNode?   @relation(fields: [nodeId], references: [id], onDelete: SetNull)
+
+  @@map("tool_guidances")
+}
+
+// ==================== 分类与标签 ====================
+
+enum TaxonomyType {
+  CATEGORY
+  TARGET_AUDIENCE
+  CAPABILITY_TAG
+  TOOL_TAG
+}
+
+model Taxonomy {
+  id          String      @id @default(cuid())
+  name        String
+  type        TaxonomyType
+  slug        String
+  description String?
+  sortOrder   Int         @default(0)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  scenes SceneTaxonomy[]
+
+  @@unique([type, slug])
+  @@map("taxonomies")
+}
+
+model SceneTaxonomy {
+  sceneId    String
+  taxonomyId String
+
+  scene    Scene    @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+  taxonomy Taxonomy @relation(fields: [taxonomyId], references: [id], onDelete: Cascade)
+
+  @@id([sceneId, taxonomyId])
+  @@map("scene_taxonomies")
+}
+
+// ==================== 媒体资源 ====================
+
+model MediaAsset {
+  id        String   @id @default(cuid())
+  url       String
+  alt       String?
+  purpose   String?
+  sceneId   String?
+  nodeId    String?
+  createdAt DateTime @default(now())
+
+  scene Scene?         @relation(fields: [sceneId], references: [id], onDelete: SetNull)
+  node  LearningNode? @relation(fields: [nodeId], references: [id], onDelete: SetNull)
+
+  @@map("media_assets")
+}
+
+// ==================== 站点设置 ====================
+
+model SiteSetting {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String
+  description String?
+  updatedAt   DateTime @updatedAt
+
+  @@map("site_settings")
+}
