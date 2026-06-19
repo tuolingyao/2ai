@@ -4,7 +4,6 @@
 import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { Button } from '@/components/ui/button'
 
 interface ProgressIndicatorProps {
   nodeId: string
@@ -17,7 +16,6 @@ const statusLabels: Record<string, string> = {
   COMPLETED: '已完成',
 }
 
-// 状态流转：未开始 → 进行中 → 已完成
 function nextStatus(current: string): string {
   if (current === 'NOT_STARTED') return 'IN_PROGRESS'
   if (current === 'IN_PROGRESS') return 'COMPLETED'
@@ -54,25 +52,28 @@ export function ProgressIndicator({ nodeId, initialStatus }: ProgressIndicatorPr
   }
 
   return (
-    <div className="flex items-center gap-3">
-      <span className="text-sm text-zinc-600">
-        状态：
-        <span className={
+    <div className="rounded-2xl border border-border bg-background/70 p-4">
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <span className="text-sm font-semibold text-foreground">学习状态</span>
+        <span className={`rounded-full px-3 py-1 text-xs ${
           status === 'COMPLETED'
-            ? 'font-medium text-green-600'
+            ? 'bg-primary text-primary-foreground'
             : status === 'IN_PROGRESS'
-            ? 'font-medium text-blue-600'
-            : 'text-zinc-500'
-        }>
-          {statusLabels[status]}
-        </span>
-      </span>
+              ? 'bg-amber-500/15 text-amber-700 dark:text-amber-300'
+              : 'bg-muted text-muted-foreground'
+        }`}>{statusLabels[status]}</span>
+      </div>
       {status !== 'COMPLETED' ? (
-        <Button onClick={handleToggle} disabled={loading} size="sm" variant="outline">
+        <button
+          type="button"
+          onClick={handleToggle}
+          disabled={loading}
+          className="w-full rounded-full border border-primary/30 px-4 py-2 text-sm font-semibold text-primary transition hover:bg-primary hover:text-primary-foreground"
+        >
           {status === 'NOT_STARTED' ? '开始学习' : '标记完成'}
-        </Button>
+        </button>
       ) : (
-        <span className="text-green-600">&#10003; 已完成</span>
+        <p className="text-sm text-primary">✓ 此节点已完成</p>
       )}
     </div>
   )

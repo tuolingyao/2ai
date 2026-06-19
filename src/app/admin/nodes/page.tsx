@@ -1,4 +1,4 @@
-// 节点管理页面 — 按场景筛选、新建/编辑/删除节点 + AI 对话示范管理
+﻿// 节点管理页面 — 按场景筛选、新建/编辑/删除节点 + AI 对话示范管理
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -316,7 +316,7 @@ export default function AdminNodesPage() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-zinc-900">节点管理</h1>
+        <h1 className="text-2xl font-bold text-foreground">节点管理</h1>
         {canCreateEdit && <Button onClick={openCreate}>新建节点</Button>}
       </div>
 
@@ -335,9 +335,9 @@ export default function AdminNodesPage() {
       </div>
 
       {/* ===== 节点列表 ===== */}
-      <div className="rounded-lg border bg-white overflow-x-auto">
+      <div className="rounded-lg border bg-card overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="border-b bg-zinc-50 text-left text-xs text-zinc-500">
+          <thead className="border-b bg-muted text-left text-xs text-muted-foreground">
             <tr>
               <th className="px-4 py-2">标题</th>
               <th className="px-4 py-2">所属场景</th>
@@ -350,15 +350,15 @@ export default function AdminNodesPage() {
           <tbody>
             {nodes.map((node) => (
               <tr key={node.id} className="border-b last:border-0">
-                <td className="px-4 py-2 font-medium text-zinc-900">{node.title}</td>
-                <td className="px-4 py-2 text-zinc-500">{node.scene.title}</td>
+                <td className="px-4 py-2 font-medium text-foreground">{node.title}</td>
+                <td className="px-4 py-2 text-muted-foreground">{node.scene.title}</td>
                 <td className="px-4 py-2">
-                  <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-700">
+                  <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
                     {stageTypeLabels[node.stage.stageType] || node.stage.stageType}
                   </span>
                 </td>
-                <td className="px-4 py-2 text-zinc-500">{node.slug}</td>
-                <td className="px-4 py-2 text-zinc-500">{node.sortOrder}</td>
+                <td className="px-4 py-2 text-muted-foreground">{node.slug}</td>
+                <td className="px-4 py-2 text-muted-foreground">{node.sortOrder}</td>
                 <td className="px-4 py-2">
                   <div className="flex gap-2">
                     {canCreateEdit && (
@@ -383,7 +383,7 @@ export default function AdminNodesPage() {
             ))}
             {nodes.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-zinc-500">
+                <td colSpan={6} className="px-4 py-8 text-center text-muted-foreground">
                   暂无节点
                 </td>
               </tr>
@@ -395,8 +395,8 @@ export default function AdminNodesPage() {
       {/* ===== 新建/编辑对话框 ===== */}
       {showDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white p-6">
-            <h2 className="mb-4 text-lg font-semibold text-zinc-900">
+          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-card p-6">
+            <h2 className="mb-4 text-lg font-semibold text-foreground">
               {editingId ? '编辑节点' : '新建节点'}
             </h2>
 
@@ -405,13 +405,13 @@ export default function AdminNodesPage() {
               <div className="mb-4 flex gap-1 border-b">
                 <button
                   onClick={() => setDialogueTab('node')}
-                  className={`px-3 py-1.5 text-sm font-medium ${dialogueTab === 'node' ? 'border-b-2 border-zinc-900 text-zinc-900' : 'text-zinc-500'}`}
+                  className={`px-3 py-1.5 text-sm font-medium ${dialogueTab === 'node' ? 'border-b-2 border-zinc-900 text-foreground' : 'text-muted-foreground'}`}
                 >
                   节点信息
                 </button>
                 <button
                   onClick={() => setDialogueTab('dialogue')}
-                  className={`px-3 py-1.5 text-sm font-medium ${dialogueTab === 'dialogue' ? 'border-b-2 border-zinc-900 text-zinc-900' : 'text-zinc-500'}`}
+                  className={`px-3 py-1.5 text-sm font-medium ${dialogueTab === 'dialogue' ? 'border-b-2 border-zinc-900 text-foreground' : 'text-muted-foreground'}`}
                 >
                   AI 对话示范
                 </button>
@@ -423,7 +423,7 @@ export default function AdminNodesPage() {
               <div className="space-y-3">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="mb-1 block text-xs text-zinc-500">标题 *</label>
+                    <label className="mb-1 block text-xs text-muted-foreground">标题 *</label>
                     <input
                       className="w-full rounded-md border px-3 py-1.5 text-sm"
                       value={form.title}
@@ -431,7 +431,7 @@ export default function AdminNodesPage() {
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs text-zinc-500">Slug *</label>
+                    <label className="mb-1 block text-xs text-muted-foreground">Slug *</label>
                     <input
                       className="w-full rounded-md border px-3 py-1.5 text-sm"
                       value={form.slug}
@@ -441,7 +441,7 @@ export default function AdminNodesPage() {
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="mb-1 block text-xs text-zinc-500">所属场景 *</label>
+                    <label className="mb-1 block text-xs text-muted-foreground">所属场景 *</label>
                     <select
                       className="w-full rounded-md border px-3 py-1.5 text-sm"
                       value={form.sceneId}
@@ -457,7 +457,7 @@ export default function AdminNodesPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs text-zinc-500">所属阶段 *</label>
+                    <label className="mb-1 block text-xs text-muted-foreground">所属阶段 *</label>
                     <input
                       className="w-full rounded-md border px-3 py-1.5 text-sm"
                       value={form.stageId}
@@ -467,46 +467,46 @@ export default function AdminNodesPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs text-zinc-500">学习目标 *</label>
+                  <label className="mb-1 block text-xs text-muted-foreground">学习目标 *</label>
                   <input className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.objective} onChange={(e) => setForm({ ...form, objective: e.target.value })} />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs text-zinc-500">关键概念 *</label>
+                  <label className="mb-1 block text-xs text-muted-foreground">关键概念 *</label>
                   <input className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.keyConcepts} onChange={(e) => setForm({ ...form, keyConcepts: e.target.value })} />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs text-zinc-500">方法重点 *</label>
+                  <label className="mb-1 block text-xs text-muted-foreground">方法重点 *</label>
                   <input className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.methodFocus} onChange={(e) => setForm({ ...form, methodFocus: e.target.value })} />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs text-zinc-500">练习任务 *</label>
+                  <label className="mb-1 block text-xs text-muted-foreground">练习任务 *</label>
                   <input className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.practiceTask} onChange={(e) => setForm({ ...form, practiceTask: e.target.value })} />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs text-zinc-500">通关标准 *</label>
+                  <label className="mb-1 block text-xs text-muted-foreground">通关标准 *</label>
                   <input className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.passCriteria} onChange={(e) => setForm({ ...form, passCriteria: e.target.value })} />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs text-zinc-500">能力证据 *</label>
+                  <label className="mb-1 block text-xs text-muted-foreground">能力证据 *</label>
                   <input className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.capabilityEvidence} onChange={(e) => setForm({ ...form, capabilityEvidence: e.target.value })} />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="mb-1 block text-xs text-zinc-500">前置条件</label>
+                    <label className="mb-1 block text-xs text-muted-foreground">前置条件</label>
                     <input className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.prerequisites} onChange={(e) => setForm({ ...form, prerequisites: e.target.value })} />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs text-zinc-500">为什么先学这个</label>
+                    <label className="mb-1 block text-xs text-muted-foreground">为什么先学这个</label>
                     <input className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.whyFirst} onChange={(e) => setForm({ ...form, whyFirst: e.target.value })} />
                   </div>
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs text-zinc-500">常见错误</label>
+                  <label className="mb-1 block text-xs text-muted-foreground">常见错误</label>
                   <input className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.commonMistakes} onChange={(e) => setForm({ ...form, commonMistakes: e.target.value })} />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="mb-1 block text-xs text-zinc-500">下一步节点</label>
+                    <label className="mb-1 block text-xs text-muted-foreground">下一步节点</label>
                     <select className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.nextNodeId} onChange={(e) => setForm({ ...form, nextNodeId: e.target.value })}>
                       <option value="">无</option>
                       {sceneNodes.map((n) => (
@@ -515,7 +515,7 @@ export default function AdminNodesPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs text-zinc-500">排序</label>
+                    <label className="mb-1 block text-xs text-muted-foreground">排序</label>
                     <input type="number" className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.sortOrder} onChange={(e) => setForm({ ...form, sortOrder: e.target.value })} />
                   </div>
                 </div>
@@ -537,11 +537,11 @@ export default function AdminNodesPage() {
                 {dialogues.length > 0 && (
                   <div className="space-y-2">
                     {dialogues.map((d) => (
-                      <div key={d.id} className="rounded-md border bg-zinc-50 p-3">
+                      <div key={d.id} className="rounded-md border bg-muted p-3">
                         <div className="flex items-center justify-between">
                           <div>
                             <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700">{d.toolChoice}</span>
-                            <span className="ml-2 text-sm text-zinc-700">{d.prompt.substring(0, 50)}...</span>
+                            <span className="ml-2 text-sm text-muted-foreground">{d.prompt.substring(0, 50)}...</span>
                           </div>
                           <div className="flex gap-2">
                             {canCreateEdit && <button onClick={() => openEditDialogue(d)} className="text-xs text-blue-600 hover:underline">编辑</button>}
@@ -557,38 +557,38 @@ export default function AdminNodesPage() {
 
                 {/* 对话示范表单 */}
                 {canCreateEdit && (
-                <div className="rounded-md border bg-white p-3 space-y-2">
-                  <h3 className="text-sm font-medium text-zinc-900">
+                <div className="rounded-md border bg-card p-3 space-y-2">
+                  <h3 className="text-sm font-medium text-foreground">
                     {editingDialogueId ? '编辑对话示范' : '新建对话示范'}
                   </h3>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="mb-1 block text-xs text-zinc-500">工具选择 *</label>
+                      <label className="mb-1 block text-xs text-muted-foreground">工具选择 *</label>
                       <input className="w-full rounded-md border px-3 py-1.5 text-sm" value={dialogueForm.toolChoice} onChange={(e) => setDialogueForm({ ...dialogueForm, toolChoice: e.target.value })} />
                     </div>
                     <div>
-                      <label className="mb-1 block text-xs text-zinc-500">排序</label>
+                      <label className="mb-1 block text-xs text-muted-foreground">排序</label>
                       <input type="number" className="w-full rounded-md border px-3 py-1.5 text-sm" value={dialogueForm.sortOrder} onChange={(e) => setDialogueForm({ ...dialogueForm, sortOrder: e.target.value })} />
                     </div>
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs text-zinc-500">提示词 *</label>
+                    <label className="mb-1 block text-xs text-muted-foreground">提示词 *</label>
                     <textarea className="w-full rounded-md border px-3 py-1.5 text-sm" rows={2} value={dialogueForm.prompt} onChange={(e) => setDialogueForm({ ...dialogueForm, prompt: e.target.value })} />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs text-zinc-500">AI 追问</label>
+                    <label className="mb-1 block text-xs text-muted-foreground">AI 追问</label>
                     <textarea className="w-full rounded-md border px-3 py-1.5 text-sm" rows={2} value={dialogueForm.aiFollowUp} onChange={(e) => setDialogueForm({ ...dialogueForm, aiFollowUp: e.target.value })} />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs text-zinc-500">用户补充</label>
+                    <label className="mb-1 block text-xs text-muted-foreground">用户补充</label>
                     <textarea className="w-full rounded-md border px-3 py-1.5 text-sm" rows={2} value={dialogueForm.userSupplement} onChange={(e) => setDialogueForm({ ...dialogueForm, userSupplement: e.target.value })} />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs text-zinc-500">AI 输出 *</label>
+                    <label className="mb-1 block text-xs text-muted-foreground">AI 输出 *</label>
                     <textarea className="w-full rounded-md border px-3 py-1.5 text-sm" rows={2} value={dialogueForm.aiOutput} onChange={(e) => setDialogueForm({ ...dialogueForm, aiOutput: e.target.value })} />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs text-zinc-500">检查清单 *</label>
+                    <label className="mb-1 block text-xs text-muted-foreground">检查清单 *</label>
                     <textarea className="w-full rounded-md border px-3 py-1.5 text-sm" rows={2} value={dialogueForm.checkList} onChange={(e) => setDialogueForm({ ...dialogueForm, checkList: e.target.value })} />
                   </div>
                   <div className="flex gap-2">

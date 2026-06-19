@@ -1,4 +1,4 @@
-// 工具建议管理页面 — 按场景筛选、新建/编辑/删除
+﻿// 工具建议管理页面 — 按场景筛选、新建/编辑/删除
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -155,7 +155,7 @@ export default function AdminToolsPage() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-zinc-900">工具建议管理</h1>
+        <h1 className="text-2xl font-bold text-foreground">工具建议管理</h1>
         {canCreateEdit && <Button onClick={openCreate}>新建工具建议</Button>}
       </div>
 
@@ -172,9 +172,9 @@ export default function AdminToolsPage() {
         </select>
       </div>
 
-      <div className="rounded-lg border bg-white overflow-x-auto">
+      <div className="rounded-lg border bg-card overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="border-b bg-zinc-50 text-left text-xs text-zinc-500">
+          <thead className="border-b bg-muted text-left text-xs text-muted-foreground">
             <tr>
               <th className="px-4 py-2">所属场景</th>
               <th className="px-4 py-2">阶段/节点</th>
@@ -186,8 +186,8 @@ export default function AdminToolsPage() {
           <tbody>
             {guidances.map((g) => (
               <tr key={g.id} className="border-b last:border-0">
-                <td className="px-4 py-2 text-zinc-700">{g.scene.title}</td>
-                <td className="px-4 py-2 text-zinc-500">
+                <td className="px-4 py-2 text-muted-foreground">{g.scene.title}</td>
+                <td className="px-4 py-2 text-muted-foreground">
                   {g.stage ? stageTypeLabels[g.stage.stageType] : '-'}
                   {g.node ? ` / ${g.node.title}` : ''}
                 </td>
@@ -211,7 +211,7 @@ export default function AdminToolsPage() {
             ))}
             {guidances.length === 0 && (
               <tr>
-                <td colSpan={5} className="px-4 py-8 text-center text-zinc-500">暂无工具建议</td>
+                <td colSpan={5} className="px-4 py-8 text-center text-muted-foreground">暂无工具建议</td>
               </tr>
             )}
           </tbody>
@@ -221,13 +221,13 @@ export default function AdminToolsPage() {
       {/* 新建/编辑对话框 */}
       {showDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-lg bg-white p-6">
-            <h2 className="mb-4 text-lg font-semibold text-zinc-900">
+          <div className="max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-lg bg-card p-6">
+            <h2 className="mb-4 text-lg font-semibold text-foreground">
               {editingId ? '编辑工具建议' : '新建工具建议'}
             </h2>
             <div className="space-y-3">
               <div>
-                <label className="mb-1 block text-xs text-zinc-500">所属场景 *</label>
+                <label className="mb-1 block text-xs text-muted-foreground">所属场景 *</label>
                 <select className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.sceneId} onChange={(e) => setForm({ ...form, sceneId: e.target.value })}>
                   <option value="">选择场景</option>
                   {scenes.map((s) => (
@@ -237,40 +237,40 @@ export default function AdminToolsPage() {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="mb-1 block text-xs text-zinc-500">阶段 ID</label>
+                  <label className="mb-1 block text-xs text-muted-foreground">阶段 ID</label>
                   <input className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.stageId} onChange={(e) => setForm({ ...form, stageId: e.target.value })} placeholder="可选" />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs text-zinc-500">节点 ID</label>
+                  <label className="mb-1 block text-xs text-muted-foreground">节点 ID</label>
                   <input className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.nodeId} onChange={(e) => setForm({ ...form, nodeId: e.target.value })} placeholder="可选" />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="mb-1 block text-xs text-zinc-500">当前工具 *</label>
+                  <label className="mb-1 block text-xs text-muted-foreground">当前工具 *</label>
                   <input className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.currentTool} onChange={(e) => setForm({ ...form, currentTool: e.target.value })} />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs text-zinc-500">当前工具用法 *</label>
+                  <label className="mb-1 block text-xs text-muted-foreground">当前工具用法 *</label>
                   <input className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.currentToolUsage} onChange={(e) => setForm({ ...form, currentToolUsage: e.target.value })} />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="mb-1 block text-xs text-zinc-500">更优工具</label>
+                  <label className="mb-1 block text-xs text-muted-foreground">更优工具</label>
                   <input className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.betterTool} onChange={(e) => setForm({ ...form, betterTool: e.target.value })} />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs text-zinc-500">更优工具用法</label>
+                  <label className="mb-1 block text-xs text-muted-foreground">更优工具用法</label>
                   <input className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.betterToolUsage} onChange={(e) => setForm({ ...form, betterToolUsage: e.target.value })} />
                 </div>
               </div>
               <div>
-                <label className="mb-1 block text-xs text-zinc-500">迁移触发条件</label>
+                <label className="mb-1 block text-xs text-muted-foreground">迁移触发条件</label>
                 <input className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.migrationTrigger} onChange={(e) => setForm({ ...form, migrationTrigger: e.target.value })} />
               </div>
               <div>
-                <label className="mb-1 block text-xs text-zinc-500">排序</label>
+                <label className="mb-1 block text-xs text-muted-foreground">排序</label>
                 <input type="number" className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.sortOrder} onChange={(e) => setForm({ ...form, sortOrder: e.target.value })} />
               </div>
             </div>

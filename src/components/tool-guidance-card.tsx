@@ -11,31 +11,30 @@ interface ToolGuidanceCardProps {
 
 export function ToolGuidanceCard({ guidance }: ToolGuidanceCardProps) {
   return (
-    <div className="rounded-lg border border-blue-100 bg-blue-50 p-4">
-      <h4 className="mb-3 text-sm font-semibold text-blue-900">工具建议</h4>
-
-      {/* 当前工具 */}
-      <div className="mb-2">
-        <span className="text-xs font-medium text-blue-700">当前工具：</span>
-        <span className="text-sm text-zinc-800">{guidance.currentTool}</span>
-        <p className="mt-0.5 text-xs text-zinc-600">{guidance.currentToolUsage}</p>
+    <div className="rounded-3xl border border-accent/25 bg-accent/5 p-5">
+      <div className="mb-5 flex items-center justify-between">
+        <h4 className="text-sm font-bold text-foreground">工具建议</h4>
+        <span className="seal-stamp rounded-sm text-xs">后置</span>
       </div>
 
-      {/* 更优工具 */}
-      {guidance.betterTool && (
-        <div className="mb-2">
-          <span className="text-xs font-medium text-green-700">更优工具：</span>
-          <span className="text-sm text-zinc-800">{guidance.betterTool}</span>
-          <p className="mt-0.5 text-xs text-zinc-600">{guidance.betterToolUsage}</p>
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="rounded-2xl border border-border bg-background/70 p-4">
+          <p className="text-xs font-semibold text-accent dark:text-accent-foreground">当前工具</p>
+          <p className="mt-2 font-bold text-foreground">{guidance.currentTool}</p>
+          <p className="mt-2 text-sm leading-6 text-muted-foreground">{guidance.currentToolUsage}</p>
         </div>
-      )}
 
-      {/* 迁移触发条件 */}
-      {guidance.migrationTrigger && (
-        <div>
-          <span className="text-xs font-medium text-amber-700">迁移条件：</span>
-          <span className="text-xs text-zinc-600">{guidance.migrationTrigger}</span>
+        <div className="rounded-2xl border border-primary/25 bg-primary/5 p-4">
+          <p className="text-xs font-semibold text-primary">进阶工具</p>
+          <p className="mt-2 font-bold text-foreground">{guidance.betterTool || '暂不需要升级'}</p>
+          <p className="mt-2 text-sm leading-6 text-muted-foreground">{guidance.betterToolUsage || '先把当前流程跑通，再根据瓶颈选择更高阶工具。'}</p>
         </div>
+      </div>
+
+      {guidance.migrationTrigger && (
+        <p className="mt-4 rounded-2xl bg-background/70 px-4 py-3 text-xs leading-6 text-muted-foreground">
+          迁移条件：{guidance.migrationTrigger}
+        </p>
       )}
     </div>
   )

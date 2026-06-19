@@ -1,4 +1,4 @@
-// 后台外壳组件（客户端，管理 Sidebar 状态）
+﻿// 后台外壳组件（客户端，管理 Sidebar 状态）
 'use client'
 
 import { useState } from 'react'
@@ -13,7 +13,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex flex-1 flex-col overflow-hidden">
         <AdminHeader onToggleSidebar={() => setSidebarOpen(true)} />
-        <div className="flex-1 overflow-y-auto bg-zinc-50 p-6">
+        <div className="flex-1 overflow-y-auto bg-muted p-6">
           {children}
         </div>
       </div>

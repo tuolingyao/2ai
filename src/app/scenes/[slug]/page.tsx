@@ -177,85 +177,95 @@ export default async function SceneDetailPage({
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8">
-      {/* ===== 预览提示条 ===== */}
-      {isPreview && (
-        <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-          此内容正在{statusLabels[scene.publishStatus]}，仅管理员可见
-        </div>
-      )}
+    <div className="min-h-screen">
+      <section className="ink-gradient rice-paper border-b border-border py-12">
+        <div className="mx-auto max-w-7xl px-4">
+          {isPreview && (
+            <div className="mb-6 rounded-2xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-700 dark:text-amber-300">
+              此内容正在{statusLabels[scene.publishStatus]}，仅管理员可见
+            </div>
+          )}
 
-      {/* ===== 顶部区块 ===== */}
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <h1 className="text-3xl font-bold text-zinc-900">{scene.title}</h1>
-          <Badge variant={scene.publishStatus === 'PUBLISHED' ? 'default' : 'secondary'}>
-            {statusLabels[scene.publishStatus]}
-          </Badge>
-        </div>
-        <p className="text-zinc-600 mb-4">{scene.summary}</p>
+          <div className="grid gap-8 lg:grid-cols-[1fr_420px] lg:items-center">
+            <div>
+              <div className="mb-5 flex flex-wrap items-center gap-3">
+                <span className="seal-stamp rounded-sm bg-background/60 text-xs">学习地图</span>
+                <Badge variant={scene.publishStatus === 'PUBLISHED' ? 'default' : 'secondary'}>
+                  {statusLabels[scene.publishStatus]}
+                </Badge>
+              </div>
+              <h1 className="text-4xl font-black tracking-wide text-foreground sm:text-5xl">{scene.title}</h1>
+              <p className="mt-5 max-w-3xl text-base leading-8 text-muted-foreground">{scene.summary}</p>
 
-        {/* 适合/不适合人群 */}
-        <div className="flex flex-col gap-2 sm:flex-row sm:gap-6 mb-4 text-sm">
-          <div>
-            <span className="font-medium text-zinc-700">适合人群：</span>
-            <span className="text-zinc-600">{scene.suitableFor}</span>
+              <div className="mt-6 grid gap-3 text-sm md:grid-cols-2">
+                <div className="rounded-2xl border border-border bg-card/70 p-4">
+                  <span className="font-semibold text-primary">适合人群：</span>
+                  <span className="text-muted-foreground">{scene.suitableFor}</span>
+                </div>
+                <div className="rounded-2xl border border-border bg-card/70 p-4">
+                  <span className="font-semibold text-primary">不适合人群：</span>
+                  <span className="text-muted-foreground">{scene.notSuitableFor}</span>
+                </div>
+              </div>
+
+              {scene.taxonomies.length > 0 && (
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {scene.taxonomies.map((t, i) => (
+                    <span key={i} className="rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs text-accent dark:text-accent-foreground">
+                      {t.taxonomy.name}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="scroll-card rounded-[2rem] p-5">
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="font-bold text-foreground">四阶段小地图</h2>
+                <span className="text-xs text-muted-foreground">点击跳转</span>
+              </div>
+              <StageTimeline stages={scene.stages} stageProgresses={stageProgressMap} />
+            </div>
           </div>
-          <div>
-            <span className="font-medium text-zinc-700">不适合人群：</span>
-            <span className="text-zinc-600">{scene.notSuitableFor}</span>
-          </div>
         </div>
+      </section>
 
-        {/* 分类标签 */}
-        {scene.taxonomies.length > 0 && (
-          <div className="flex flex-wrap gap-1.5">
-            {scene.taxonomies.map((t, i) => (
-              <Badge key={i} variant="secondary">
-                {t.taxonomy.name}
-              </Badge>
+      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 lg:grid-cols-[260px_1fr]">
+        <aside className="hidden lg:block">
+          <div className="sticky top-24 rounded-3xl border border-border bg-card/80 p-5 backdrop-blur">
+            <p className="mb-4 text-sm font-semibold text-foreground">学习地图导航</p>
+            <StageTimeline stages={scene.stages} stageProgresses={stageProgressMap} />
+          </div>
+        </aside>
+
+        <div>
+          <div className="space-y-8">
+            {stagesWithNodes.map((stage) => (
+              <StageSection
+                key={stage.id}
+                stage={stage}
+                stageProgress={stageProgressMap?.[stage.id] ?? null}
+              />
             ))}
           </div>
-        )}
+
+          <div className="mt-10 rounded-[2rem] border border-border bg-card/80 p-8">
+            <h2 className="mb-3 text-xl font-black text-foreground">走完后你会掌握...</h2>
+            <p className="mb-6 leading-8 text-muted-foreground">
+              {scene.stages.map((s) => s.capabilityStd).join('；')}
+            </p>
+            {firstNode && (
+              <Link
+                href={`/scenes/${sceneSlug}/nodes/${firstNode.slug}`}
+                className="inline-flex rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground transition hover:-translate-y-0.5 hover:bg-primary/90"
+              >
+                从第一个学习节点开始
+              </Link>
+            )}
+          </div>
+        </div>
       </div>
 
-      {/* ===== 四阶段总览时间线 ===== */}
-      <div className="mb-10 rounded-lg border bg-white p-6">
-        <h2 className="mb-4 text-lg font-bold text-zinc-900">学习路径</h2>
-        <StageTimeline stages={scene.stages} stageProgresses={stageProgressMap} />
-      </div>
-
-      {/* ===== 四阶段详情 ===== */}
-      <div className="space-y-6">
-        {stagesWithNodes.map((stage, i) => (
-          <StageSection
-            key={stage.id}
-            stage={stage}
-            nodes={stage.nodes}
-            toolGuidances={stage.toolGuidances}
-            stageIndex={i}
-            stageProgress={stageProgressMap?.[stage.id] ?? null}
-          />
-        ))}
-      </div>
-
-      {/* ===== 底部区块 ===== */}
-      <div className="mt-10 rounded-lg border bg-zinc-50 p-6">
-        <h2 className="mb-2 text-lg font-bold text-zinc-900">走完后你会掌握...</h2>
-        <p className="mb-6 text-zinc-600">
-          {scene.stages.map((s) => s.capabilityStd).join('；')}
-        </p>
-        {firstNode && (
-          <Link
-            href={`/scenes/${sceneSlug}/nodes/${firstNode.slug}`}
-            className="inline-block rounded-lg bg-zinc-900 px-6 py-2.5 text-white hover:bg-zinc-700 transition-colors"
-          >
-            从第一个学习节点开始
-          </Link>
-        )}
-      </div>
-
-      {/* JSON-LD 结构化数据 */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

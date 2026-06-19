@@ -1,4 +1,4 @@
-// 分类标签管理页面 — 按类型筛选、新建/编辑/删除
+﻿// 分类标签管理页面 — 按类型筛选、新建/编辑/删除
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -130,7 +130,7 @@ export default function AdminTaxonomiesPage() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-zinc-900">分类标签管理</h1>
+        <h1 className="text-2xl font-bold text-foreground">分类标签管理</h1>
         {canCreateEdit && <Button onClick={openCreate}>新建标签</Button>}
       </div>
 
@@ -138,7 +138,7 @@ export default function AdminTaxonomiesPage() {
       <div className="flex gap-2">
         <button
           onClick={() => setTypeFilter('')}
-          className={`rounded-full px-3 py-1 text-xs font-medium ${!typeFilter ? 'bg-zinc-900 text-white' : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'}`}
+          className={`rounded-full px-3 py-1 text-xs font-medium ${!typeFilter ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-muted/80'}`}
         >
           全部
         </button>
@@ -146,16 +146,16 @@ export default function AdminTaxonomiesPage() {
           <button
             key={key}
             onClick={() => setTypeFilter(key)}
-            className={`rounded-full px-3 py-1 text-xs font-medium ${typeFilter === key ? 'bg-zinc-900 text-white' : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'}`}
+            className={`rounded-full px-3 py-1 text-xs font-medium ${typeFilter === key ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-muted/80'}`}
           >
             {label}
           </button>
         ))}
       </div>
 
-      <div className="rounded-lg border bg-white overflow-x-auto">
+      <div className="rounded-lg border bg-card overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="border-b bg-zinc-50 text-left text-xs text-zinc-500">
+          <thead className="border-b bg-muted text-left text-xs text-muted-foreground">
             <tr>
               <th className="px-4 py-2">名称</th>
               <th className="px-4 py-2">类型</th>
@@ -168,15 +168,15 @@ export default function AdminTaxonomiesPage() {
           <tbody>
             {taxonomies.map((t) => (
               <tr key={t.id} className="border-b last:border-0">
-                <td className="px-4 py-2 font-medium text-zinc-900">{t.name}</td>
+                <td className="px-4 py-2 font-medium text-foreground">{t.name}</td>
                 <td className="px-4 py-2">
                   <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${typeColors[t.type]}`}>
                     {typeLabels[t.type]}
                   </span>
                 </td>
-                <td className="px-4 py-2 text-zinc-500">{t.slug}</td>
-                <td className="px-4 py-2 text-zinc-500 max-w-[200px] truncate">{t.description || '-'}</td>
-                <td className="px-4 py-2 text-zinc-500">{t._count.scenes}</td>
+                <td className="px-4 py-2 text-muted-foreground">{t.slug}</td>
+                <td className="px-4 py-2 text-muted-foreground max-w-[200px] truncate">{t.description || '-'}</td>
+                <td className="px-4 py-2 text-muted-foreground">{t._count.scenes}</td>
                 <td className="px-4 py-2">
                   <div className="flex gap-2">
                     {canCreateEdit && <button onClick={() => openEdit(t)} className="text-xs text-blue-600 hover:underline">编辑</button>}
@@ -189,7 +189,7 @@ export default function AdminTaxonomiesPage() {
             ))}
             {taxonomies.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-zinc-500">暂无标签</td>
+                <td colSpan={6} className="px-4 py-8 text-center text-muted-foreground">暂无标签</td>
               </tr>
             )}
           </tbody>
@@ -199,24 +199,24 @@ export default function AdminTaxonomiesPage() {
       {/* 新建/编辑对话框 */}
       {showDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-full max-w-md rounded-lg bg-white p-6">
-            <h2 className="mb-4 text-lg font-semibold text-zinc-900">
+          <div className="w-full max-w-md rounded-lg bg-card p-6">
+            <h2 className="mb-4 text-lg font-semibold text-foreground">
               {editingId ? '编辑标签' : '新建标签'}
             </h2>
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="mb-1 block text-xs text-zinc-500">名称 *</label>
+                  <label className="mb-1 block text-xs text-muted-foreground">名称 *</label>
                   <input className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs text-zinc-500">Slug *</label>
+                  <label className="mb-1 block text-xs text-muted-foreground">Slug *</label>
                   <input className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="mb-1 block text-xs text-zinc-500">类型 *</label>
+                  <label className="mb-1 block text-xs text-muted-foreground">类型 *</label>
                   <select className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })}>
                     {Object.entries(typeLabels).map(([key, label]) => (
                       <option key={key} value={key}>{label}</option>
@@ -224,12 +224,12 @@ export default function AdminTaxonomiesPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs text-zinc-500">排序</label>
+                  <label className="mb-1 block text-xs text-muted-foreground">排序</label>
                   <input type="number" className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.sortOrder} onChange={(e) => setForm({ ...form, sortOrder: e.target.value })} />
                 </div>
               </div>
               <div>
-                <label className="mb-1 block text-xs text-zinc-500">描述</label>
+                <label className="mb-1 block text-xs text-muted-foreground">描述</label>
                 <textarea className="w-full rounded-md border px-3 py-1.5 text-sm" rows={2} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
               </div>
             </div>

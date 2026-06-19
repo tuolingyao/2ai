@@ -5,7 +5,6 @@ import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Textarea } from '@/components/ui/textarea'
-import { Button } from '@/components/ui/button'
 
 interface Evidence {
   id: string
@@ -36,7 +35,6 @@ export function EvidenceForm({ nodeId, existingEvidence }: EvidenceFormProps) {
     setLoading(true)
     try {
       if (evidence) {
-        // 更新
         const res = await fetch(`/api/user/evidences/${evidence.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -48,7 +46,6 @@ export function EvidenceForm({ nodeId, existingEvidence }: EvidenceFormProps) {
           setEditing(false)
         }
       } else {
-        // 创建
         const res = await fetch('/api/user/evidences', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -84,32 +81,38 @@ export function EvidenceForm({ nodeId, existingEvidence }: EvidenceFormProps) {
   }
 
   return (
-    <div className="space-y-3">
-      <h4 className="text-sm font-medium text-zinc-700">能力证据</h4>
+    <div className="rounded-2xl border border-border bg-background/70 p-4">
+      <h4 className="text-sm font-semibold text-foreground">能力证据</h4>
 
       {evidence && !editing ? (
-        <div className="rounded-md border bg-white p-3">
-          <p className="text-sm text-zinc-800 whitespace-pre-wrap">{evidence.content}</p>
-          <div className="mt-2 flex gap-2">
-            <Button size="sm" variant="outline" onClick={() => setEditing(true)}>
+        <div className="mt-3 rounded-2xl border border-primary/20 bg-primary/5 p-3">
+          <p className="whitespace-pre-wrap text-sm leading-7 text-muted-foreground">{evidence.content}</p>
+          <div className="mt-3 flex gap-2">
+            <button type="button" className="rounded-full border border-border px-3 py-1 text-xs text-foreground hover:border-primary hover:text-primary" onClick={() => setEditing(true)}>
               编辑
-            </Button>
-            <Button size="sm" variant="outline" onClick={handleDelete} disabled={loading}>
+            </button>
+            <button type="button" className="rounded-full border border-border px-3 py-1 text-xs text-foreground hover:border-primary hover:text-primary" onClick={handleDelete} disabled={loading}>
               删除
-            </Button>
+            </button>
           </div>
         </div>
       ) : (
-        <div className="space-y-2">
+        <div className="mt-3 space-y-3">
           <Textarea
             placeholder="记录你的能力证据..."
             value={content}
             onChange={(e) => setContent(e.target.value)}
             rows={4}
+            className="border-border bg-card text-foreground placeholder:text-muted-foreground"
           />
-          <Button onClick={handleSubmit} disabled={loading || !content.trim()} size="sm">
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={loading || !content.trim()}
+            className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 disabled:opacity-50"
+          >
             {evidence ? '更新' : '提交'}
-          </Button>
+          </button>
         </div>
       )}
     </div>

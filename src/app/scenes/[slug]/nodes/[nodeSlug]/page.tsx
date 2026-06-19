@@ -20,6 +20,15 @@ const stageLabels: Record<string, string> = {
   ADVANCE: '持续进阶',
 }
 
+function InfoBlock({ title, content }: { title: string; content: string }) {
+  return (
+    <div className="rounded-2xl border border-border bg-background/70 p-5">
+      <h3 className="text-sm font-semibold text-primary">{title}</h3>
+      <p className="mt-3 text-sm leading-7 text-muted-foreground">{content}</p>
+    </div>
+  )
+}
+
 // 动态生成 metadata
 export async function generateMetadata({
   params,
@@ -128,160 +137,109 @@ export default async function NodePage({
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8">
-      {/* ===== 面包屑导航 ===== */}
-      <nav className="mb-6 flex items-center gap-1.5 text-sm text-zinc-500">
-        <Link href="/" className="hover:text-zinc-900">首页</Link>
-        <span>/</span>
-        <Link href="/scenes" className="hover:text-zinc-900">场景库</Link>
-        <span>/</span>
-        <Link href={`/scenes/${slug}`} className="hover:text-zinc-900">{node.scene.title}</Link>
-        <span>/</span>
-        <span className="text-zinc-900">{node.title}</span>
-      </nav>
+    <div className="min-h-screen">
+      <section className="ink-gradient rice-paper border-b border-border py-10">
+        <div className="mx-auto max-w-7xl px-4">
+          <nav className="mb-8 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+            <Link href="/" className="hover:text-primary">首页</Link>
+            <span>/</span>
+            <Link href="/scenes" className="hover:text-primary">场景库</Link>
+            <span>/</span>
+            <Link href={`/scenes/${slug}`} className="hover:text-primary">{node.scene.title}</Link>
+            <span>/</span>
+            <span className="text-foreground">{node.title}</span>
+          </nav>
 
-      {/* ===== 顶部 ===== */}
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <h1 className="text-3xl font-bold text-zinc-900">{node.title}</h1>
-          <Badge variant="secondary">{stageLabels[node.stage.stageType]}</Badge>
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="seal-stamp rounded-sm bg-background/60 text-xs">学习工作台</span>
+            <Badge variant="secondary">{stageLabels[node.stage.stageType]}</Badge>
+          </div>
+          <h1 className="mt-5 max-w-4xl text-4xl font-black tracking-wide text-foreground sm:text-5xl">{node.title}</h1>
+          <p className="mt-5 max-w-3xl text-base leading-8 text-muted-foreground">{node.objective}</p>
         </div>
-      </div>
+      </section>
 
-      {/* ===== 节点内容 ===== */}
-      <div className="space-y-6">
-        {/* 学习目标 */}
-        <section>
-          <h2 className="mb-2 text-sm font-semibold text-zinc-700">学习目标</h2>
-          <p className="text-zinc-800">{node.objective}</p>
-        </section>
-
-        {/* 前置条件 */}
-        {node.prerequisites && (
-          <section>
-            <h2 className="mb-2 text-sm font-semibold text-zinc-700">前置条件</h2>
-            <p className="text-zinc-600">{node.prerequisites}</p>
+      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 lg:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]">
+        <main className="space-y-6">
+          <section className="scroll-card rounded-[2rem] p-6 sm:p-8">
+            <h2 className="text-xl font-black text-foreground">学习内容</h2>
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+              {node.prerequisites && <InfoBlock title="前置条件" content={node.prerequisites} />}
+              {node.whyFirst && <InfoBlock title="为什么先学这个" content={node.whyFirst} />}
+              <InfoBlock title="关键概念" content={node.keyConcepts} />
+              <InfoBlock title="方法重点" content={node.methodFocus} />
+              <InfoBlock title="练习任务" content={node.practiceTask} />
+              <InfoBlock title="通关标准" content={node.passCriteria} />
+            </div>
           </section>
-        )}
 
-        {/* 为什么先学这个 */}
-        {node.whyFirst && (
-          <section>
-            <h2 className="mb-2 text-sm font-semibold text-zinc-700">为什么先学这个</h2>
-            <p className="text-zinc-600">{node.whyFirst}</p>
-          </section>
-        )}
+          {node.dialogueExamples.length > 0 && (
+            <section>
+              <div className="mb-4 border-l-4 border-primary pl-4">
+                <h2 className="text-xl font-black text-foreground">AI 对话示范</h2>
+                <p className="mt-1 text-sm text-muted-foreground">观察提示词、追问、补充和输出如何协同。</p>
+              </div>
+              <div className="space-y-5">
+                {node.dialogueExamples.map((d) => (
+                  <AiDialogue key={d.id} dialogue={d} />
+                ))}
+              </div>
+            </section>
+          )}
 
-        {/* 关键概念 */}
-        <section>
-          <h2 className="mb-2 text-sm font-semibold text-zinc-700">关键概念</h2>
-          <p className="text-zinc-600">{node.keyConcepts}</p>
-        </section>
+          {node.toolGuidances.length > 0 && (
+            <section>
+              <div className="mb-4 border-l-4 border-primary pl-4">
+                <h2 className="text-xl font-black text-foreground">工具建议</h2>
+                <p className="mt-1 text-sm text-muted-foreground">工具后置，先跑通当前任务，再判断是否升级。</p>
+              </div>
+              <div className="space-y-4">
+                {node.toolGuidances.map((g) => (
+                  <ToolGuidanceCard key={g.id} guidance={g} />
+                ))}
+              </div>
+            </section>
+          )}
 
-        {/* 方法重点 */}
-        <section>
-          <h2 className="mb-2 text-sm font-semibold text-zinc-700">方法重点</h2>
-          <p className="text-zinc-800">{node.methodFocus}</p>
-        </section>
+          {node.commonMistakes && (
+            <section className="rounded-[2rem] border border-primary/20 bg-primary/5 p-6">
+              <h2 className="text-sm font-semibold text-primary">常见错误</h2>
+              <p className="mt-3 leading-8 text-muted-foreground">{node.commonMistakes}</p>
+            </section>
+          )}
+        </main>
 
-        {/* AI 对话示范 */}
-        {node.dialogueExamples.length > 0 && (
-          <section>
-            <h2 className="mb-3 text-sm font-semibold text-zinc-700">AI 对话示范</h2>
+        <aside className="lg:sticky lg:top-24 lg:self-start">
+          <div className="scroll-card rounded-[2rem] p-5">
+            {!userId && (
+              <div className="mb-4 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-3 text-sm text-amber-700 dark:text-amber-300">
+                请先 <Link href="/auth/signin" className="font-medium underline">登录</Link> 后使用收藏、进度和证据功能
+              </div>
+            )}
+
             <div className="space-y-4">
-              {node.dialogueExamples.map((d) => (
-                <AiDialogue key={d.id} dialogue={d} />
-              ))}
+              <FavoriteButton sceneId={node.scene.id} isFavorited={isFavorited} />
+              <ProgressIndicator nodeId={node.id} initialStatus={progressStatus} />
+              <EvidenceForm nodeId={node.id} existingEvidence={existingEvidence} />
+              <div className="rounded-2xl border border-border bg-background/70 p-4">
+                <h3 className="text-sm font-semibold text-foreground">能力证据说明</h3>
+                <p className="mt-2 text-sm leading-7 text-muted-foreground">{node.capabilityEvidence}</p>
+              </div>
+              <div className="flex flex-col gap-3 pt-2">
+                {nextNode && (
+                  <Link href={`/scenes/${slug}/nodes/${nextNode.slug}`} className="rounded-full bg-primary px-5 py-3 text-center text-sm font-semibold text-primary-foreground transition hover:bg-primary/90">
+                    下一步：{nextNode.title} →
+                  </Link>
+                )}
+                <Link href={`/scenes/${slug}`} className="rounded-full border border-border px-5 py-3 text-center text-sm font-semibold text-foreground hover:border-primary hover:text-primary">
+                  返回场景页
+                </Link>
+              </div>
             </div>
-          </section>
-        )}
-
-        {/* 练习任务 */}
-        <section>
-          <h2 className="mb-2 text-sm font-semibold text-zinc-700">练习任务</h2>
-          <p className="text-zinc-800">{node.practiceTask}</p>
-        </section>
-
-        {/* 工具建议（后置展示） */}
-        {node.toolGuidances.length > 0 && (
-          <section>
-            <h2 className="mb-3 text-sm font-semibold text-zinc-700">工具建议</h2>
-            <div className="space-y-3">
-              {node.toolGuidances.map((g) => (
-                <ToolGuidanceCard key={g.id} guidance={g} />
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* 常见错误 */}
-        {node.commonMistakes && (
-          <section>
-            <h2 className="mb-2 text-sm font-semibold text-zinc-700">常见错误</h2>
-            <p className="text-zinc-600">{node.commonMistakes}</p>
-          </section>
-        )}
-
-        {/* 通关标准 */}
-        <section>
-          <h2 className="mb-2 text-sm font-semibold text-zinc-700">通关标准</h2>
-          <p className="text-zinc-800">{node.passCriteria}</p>
-        </section>
-
-        {/* 能力证据说明 */}
-        <section>
-          <h2 className="mb-2 text-sm font-semibold text-zinc-700">能力证据</h2>
-          <p className="text-zinc-600">{node.capabilityEvidence}</p>
-        </section>
+          </div>
+        </aside>
       </div>
 
-      {/* ===== 交互区域 ===== */}
-      <div className="mt-10 rounded-lg border bg-zinc-50 p-6">
-        {!userId && (
-          <div className="mb-4 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
-            请先 <Link href="/auth/signin" className="font-medium underline">登录</Link> 后使用收藏、进度和证据功能
-          </div>
-        )}
-
-        <div className="space-y-6">
-          {/* 收藏 */}
-          <div>
-            <h3 className="mb-2 text-sm font-semibold text-zinc-700">收藏场景</h3>
-            <FavoriteButton sceneId={node.scene.id} isFavorited={isFavorited} />
-          </div>
-
-          {/* 进度 */}
-          <div>
-            <h3 className="mb-2 text-sm font-semibold text-zinc-700">学习进度</h3>
-            <ProgressIndicator nodeId={node.id} initialStatus={progressStatus} />
-          </div>
-
-          {/* 能力证据提交 */}
-          <div>
-            <EvidenceForm nodeId={node.id} existingEvidence={existingEvidence} />
-          </div>
-        </div>
-      </div>
-
-      {/* ===== 底部导航 ===== */}
-      <div className="mt-8 flex items-center justify-between">
-        <Link
-          href={`/scenes/${slug}`}
-          className="text-sm text-zinc-600 hover:text-zinc-900"
-        >
-          &larr; 返回场景页
-        </Link>
-        {nextNode && (
-          <Link
-            href={`/scenes/${slug}/nodes/${nextNode.slug}`}
-            className="text-sm font-medium text-blue-600 hover:text-blue-800"
-          >
-            下一步：{nextNode.title} &rarr;
-          </Link>
-        )}
-      </div>
-
-      {/* ===== JSON-LD 结构化数据 ===== */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

@@ -1,4 +1,4 @@
-// 场景管理列表页 — 筛选、新建、编辑、删除
+﻿// 场景管理列表页 — 筛选、新建、编辑、删除
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -16,7 +16,7 @@ const statusLabels: Record<string, string> = {
 }
 
 const statusColors: Record<string, string> = {
-  DRAFT: 'bg-zinc-100 text-zinc-700',
+  DRAFT: 'bg-muted text-muted-foreground',
   PREVIEW: 'bg-blue-100 text-blue-700',
   PENDING_REVIEW: 'bg-amber-100 text-amber-700',
   PUBLISHED: 'bg-green-100 text-green-700',
@@ -127,7 +127,7 @@ export default function AdminScenesPage() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-zinc-900">场景管理</h1>
+        <h1 className="text-2xl font-bold text-foreground">场景管理</h1>
         {canEdit && <Button onClick={() => setShowCreate(true)}>新建场景</Button>}
       </div>
 
@@ -135,7 +135,7 @@ export default function AdminScenesPage() {
       <div className="flex gap-2">
         <button
           onClick={() => { setStatusFilter(''); setPage(1) }}
-          className={`rounded-full px-3 py-1 text-xs font-medium ${!statusFilter ? 'bg-zinc-900 text-white' : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'}`}
+          className={`rounded-full px-3 py-1 text-xs font-medium ${!statusFilter ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-muted/80'}`}
         >
           全部
         </button>
@@ -143,7 +143,7 @@ export default function AdminScenesPage() {
           <button
             key={key}
             onClick={() => { setStatusFilter(key); setPage(1) }}
-            className={`rounded-full px-3 py-1 text-xs font-medium ${statusFilter === key ? 'bg-zinc-900 text-white' : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'}`}
+            className={`rounded-full px-3 py-1 text-xs font-medium ${statusFilter === key ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-muted/80'}`}
           >
             {label}
           </button>
@@ -152,11 +152,11 @@ export default function AdminScenesPage() {
 
       {/* ===== 新建表单 ===== */}
       {showCreate && (
-        <div className="rounded-lg border bg-white p-4 space-y-3">
-          <h2 className="font-semibold text-zinc-900">新建场景</h2>
+        <div className="rounded-lg border bg-card p-4 space-y-3">
+          <h2 className="font-semibold text-foreground">新建场景</h2>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="mb-1 block text-xs text-zinc-500">标题 *</label>
+              <label className="mb-1 block text-xs text-muted-foreground">标题 *</label>
               <input
                 className="w-full rounded-md border px-3 py-1.5 text-sm"
                 value={form.title}
@@ -167,7 +167,7 @@ export default function AdminScenesPage() {
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs text-zinc-500">Slug *</label>
+              <label className="mb-1 block text-xs text-muted-foreground">Slug *</label>
               <input
                 className="w-full rounded-md border px-3 py-1.5 text-sm"
                 value={form.slug}
@@ -176,7 +176,7 @@ export default function AdminScenesPage() {
             </div>
           </div>
           <div>
-            <label className="mb-1 block text-xs text-zinc-500">摘要 *</label>
+            <label className="mb-1 block text-xs text-muted-foreground">摘要 *</label>
             <textarea
               className="w-full rounded-md border px-3 py-1.5 text-sm"
               rows={2}
@@ -186,7 +186,7 @@ export default function AdminScenesPage() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="mb-1 block text-xs text-zinc-500">适合人群 *</label>
+              <label className="mb-1 block text-xs text-muted-foreground">适合人群 *</label>
               <input
                 className="w-full rounded-md border px-3 py-1.5 text-sm"
                 value={form.suitableFor}
@@ -194,7 +194,7 @@ export default function AdminScenesPage() {
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs text-zinc-500">不适合人群 *</label>
+              <label className="mb-1 block text-xs text-muted-foreground">不适合人群 *</label>
               <input
                 className="w-full rounded-md border px-3 py-1.5 text-sm"
                 value={form.notSuitableFor}
@@ -214,9 +214,9 @@ export default function AdminScenesPage() {
       )}
 
       {/* ===== 场景列表 ===== */}
-      <div className="rounded-lg border bg-white overflow-x-auto">
+      <div className="rounded-lg border bg-card overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="border-b bg-zinc-50 text-left text-xs text-zinc-500">
+          <thead className="border-b bg-muted text-left text-xs text-muted-foreground">
             <tr>
               <th className="px-4 py-2">标题</th>
               <th className="px-4 py-2">Slug</th>
@@ -231,17 +231,17 @@ export default function AdminScenesPage() {
           <tbody>
             {scenes.map((scene) => (
               <tr key={scene.id} className="border-b last:border-0">
-                <td className="px-4 py-2 font-medium text-zinc-900">{scene.title}</td>
-                <td className="px-4 py-2 text-zinc-500">{scene.slug}</td>
+                <td className="px-4 py-2 font-medium text-foreground">{scene.title}</td>
+                <td className="px-4 py-2 text-muted-foreground">{scene.slug}</td>
                 <td className="px-4 py-2">
                   <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${statusColors[scene.publishStatus]}`}>
                     {statusLabels[scene.publishStatus]}
                   </span>
                 </td>
-                <td className="px-4 py-2 text-zinc-500">{scene.sortOrder}</td>
+                <td className="px-4 py-2 text-muted-foreground">{scene.sortOrder}</td>
                 <td className="px-4 py-2">{scene.isRecommended ? '⭐' : '-'}</td>
-                <td className="px-4 py-2 text-zinc-500">{scene._count.stages}/{scene._count.nodes}</td>
-                <td className="px-4 py-2 text-zinc-500">
+                <td className="px-4 py-2 text-muted-foreground">{scene._count.stages}/{scene._count.nodes}</td>
+                <td className="px-4 py-2 text-muted-foreground">
                   {new Date(scene.updatedAt).toLocaleDateString('zh-CN')}
                 </td>
                 <td className="px-4 py-2">
@@ -268,7 +268,7 @@ export default function AdminScenesPage() {
             ))}
             {scenes.length === 0 && (
               <tr>
-                <td colSpan={8} className="px-4 py-8 text-center text-zinc-500">
+                <td colSpan={8} className="px-4 py-8 text-center text-muted-foreground">
                   暂无场景
                 </td>
               </tr>
@@ -288,7 +288,7 @@ export default function AdminScenesPage() {
           >
             上一页
           </Button>
-          <span className="text-sm text-zinc-500">
+          <span className="text-sm text-muted-foreground">
             {page} / {totalPages}
           </span>
           <Button

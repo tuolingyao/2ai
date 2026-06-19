@@ -1,4 +1,4 @@
-// 阶段详情区块组件 — 展示单个阶段的完整内容
+// 阶段区块组件 — 展示阶段目标、节点和工具建议
 import { NodeCard } from './node-card'
 import { ToolGuidanceCard } from './tool-guidance-card'
 
@@ -9,23 +9,6 @@ const stageLabels: Record<string, string> = {
   ADVANCE: '持续进阶',
 }
 
-interface NodeData {
-  id: string
-  title: string
-  slug: string
-  objective: string
-  sceneSlug: string
-}
-
-interface ToolGuidanceData {
-  id: string
-  currentTool: string
-  currentToolUsage: string
-  betterTool: string | null
-  betterToolUsage: string | null
-  migrationTrigger: string | null
-}
-
 interface StageSectionProps {
   stage: {
     id: string
@@ -34,86 +17,86 @@ interface StageSectionProps {
     learningFocus: string
     practiceTask: string
     capabilityEvidence: string
-    aiIntervention: string
-    sortOrder: number
+    commonFailure?: string | null
+    remedialAction?: string | null
+    nodes: {
+      id: string
+      title: string
+      slug: string
+      objective: string
+      sceneSlug: string
+    }[]
+    toolGuidances: {
+      id: string
+      currentTool: string
+      currentToolUsage: string
+      betterTool: string | null
+      betterToolUsage: string | null
+      migrationTrigger: string | null
+    }[]
   }
-  nodes: NodeData[]
-  toolGuidances: ToolGuidanceData[]
-  stageIndex: number
-  stageProgress?: { completedNodes: number; totalNodes: number; isCompleted: boolean; inProgressCount: number } | null
+  stageProgress?: { completedNodes: number; totalNodes: number; isCompleted: boolean } | null
 }
 
-export function StageSection({ stage, nodes, toolGuidances, stageIndex, stageProgress }: StageSectionProps) {
+export function StageSection({ stage, stageProgress }: StageSectionProps) {
   return (
-    <section id={`stage-${stage.id}`} className="scroll-mt-20">
-      <div className="rounded-lg border bg-white p-6">
-        {/* 阶段标题 */}
-        <div className="mb-4 flex items-center gap-3">
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 text-sm font-bold text-white">
-            {stageIndex + 1}
-          </span>
-          <h2 className="text-xl font-bold text-zinc-900">
-            {stageLabels[stage.stageType] || stage.stageType}
-          </h2>
-          {stageProgress?.isCompleted && (
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-green-500 text-white" title="阶段已完成">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
-                <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
-              </svg>
-            </span>
-          )}
-          {stageProgress && !stageProgress.isCompleted && (stageProgress.completedNodes > 0 || stageProgress.inProgressCount > 0) && (
-            <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-700">
-              {stageProgress.completedNodes}/{stageProgress.totalNodes} 节点已完成
-            </span>
-          )}
+    <section id={`stage-${stage.id}`} className="scroll-mt-28 rounded-[2rem] border border-border bg-card/80 p-6 shadow-sm sm:p-8">
+      <div className="mb-8 flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+        <div>
+          <div className="mb-4 flex flex-wrap items-center gap-3">
+            <span className="seal-stamp rounded-sm bg-background/60 text-sm">{stageLabels[stage.stageType] || stage.stageType}</span>
+            {stageProgress?.isCompleted ? (
+              <span className="rounded-full bg-primary px-3 py-1 text-xs text-primary-foreground">阶段已完成</span>
+            ) : stageProgress && stageProgress.completedNodes > 0 ? (
+              <span className="rounded-full bg-amber-500/15 px-3 py-1 text-xs text-amber-700 dark:text-amber-300">
+                {stageProgress.completedNodes}/{stageProgress.totalNodes} 节点已完成
+              </span>
+            ) : null}
+          </div>
+          <h2 className="text-2xl font-black text-foreground">{stage.capabilityStd}</h2>
         </div>
+      </div>
 
-        {/* 阶段内容 */}
-        <div className="space-y-3 text-sm">
-          <div>
-            <span className="font-medium text-zinc-700">能力标准：</span>
-            <span className="text-zinc-600">{stage.capabilityStd}</span>
-          </div>
-          <div>
-            <span className="font-medium text-zinc-700">学习重点：</span>
-            <span className="text-zinc-600">{stage.learningFocus}</span>
-          </div>
-          <div>
-            <span className="font-medium text-zinc-700">练习任务：</span>
-            <span className="text-zinc-600">{stage.practiceTask}</span>
-          </div>
-          <div>
-            <span className="font-medium text-zinc-700">能力证据：</span>
-            <span className="text-zinc-600">{stage.capabilityEvidence}</span>
-          </div>
-          <div>
-            <span className="font-medium text-zinc-700">AI 介入方式：</span>
-            <span className="text-zinc-600">{stage.aiIntervention}</span>
-          </div>
+      <div className="grid gap-4 md:grid-cols-3">
+        <div className="rounded-2xl border border-border bg-background/70 p-5">
+          <p className="text-xs font-semibold text-primary">学习重点</p>
+          <p className="mt-3 text-sm leading-7 text-muted-foreground">{stage.learningFocus}</p>
         </div>
+        <div className="rounded-2xl border border-border bg-background/70 p-5">
+          <p className="text-xs font-semibold text-primary">练习任务</p>
+          <p className="mt-3 text-sm leading-7 text-muted-foreground">{stage.practiceTask}</p>
+        </div>
+        <div className="rounded-2xl border border-border bg-background/70 p-5">
+          <p className="text-xs font-semibold text-primary">能力证据</p>
+          <p className="mt-3 text-sm leading-7 text-muted-foreground">{stage.capabilityEvidence}</p>
+        </div>
+      </div>
 
-        {/* 学习节点 */}
-        {nodes.length > 0 && (
-          <div className="mt-6">
-            <h3 className="mb-3 text-sm font-medium text-zinc-700">学习节点</h3>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {nodes.map((node) => (
-                <NodeCard key={node.id} node={node} />
-              ))}
-            </div>
-          </div>
-        )}
+      {(stage.commonFailure || stage.remedialAction) && (
+        <div className="mt-5 rounded-2xl border border-primary/20 bg-primary/5 p-5 text-sm leading-7 text-muted-foreground">
+          {stage.commonFailure && <p><span className="font-semibold text-foreground">常见卡点：</span>{stage.commonFailure}</p>}
+          {stage.remedialAction && <p className="mt-2"><span className="font-semibold text-foreground">补救动作：</span>{stage.remedialAction}</p>}
+        </div>
+      )}
 
-        {/* 工具建议（后置展示） */}
-        {toolGuidances.length > 0 && (
-          <div className="mt-6">
-            {toolGuidances.map((guidance) => (
-              <ToolGuidanceCard key={guidance.id} guidance={guidance} />
+      {stage.nodes.length > 0 && (
+        <div className="mt-8">
+          <h3 className="mb-4 text-lg font-bold text-foreground">学习节点</h3>
+          <div className="grid gap-4 md:grid-cols-2">
+            {stage.nodes.map((node) => (
+              <NodeCard key={node.id} node={node} />
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
+
+      {stage.toolGuidances.length > 0 && (
+        <div className="mt-8 space-y-4">
+          {stage.toolGuidances.map((guidance) => (
+            <ToolGuidanceCard key={guidance.id} guidance={guidance} />
+          ))}
+        </div>
+      )}
     </section>
   )
 }

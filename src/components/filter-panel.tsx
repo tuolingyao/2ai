@@ -3,7 +3,6 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useState, Suspense } from 'react'
-import { Badge } from '@/components/ui/badge'
 
 interface Taxonomy {
   id: string
@@ -19,7 +18,6 @@ function FilterPanelInner() {
 
   const selectedCategory = searchParams.get('category') || ''
 
-  // 获取分类标签
   useEffect(() => {
     fetch('/api/taxonomies?type=CATEGORY')
       .then((res) => res.json())
@@ -43,17 +41,27 @@ function FilterPanelInner() {
   if (categories.length === 0) return null
 
   return (
-    <div className="flex flex-wrap gap-2">
-      {categories.map((cat) => (
-        <Badge
-          key={cat.id}
-          variant={selectedCategory === cat.slug ? 'default' : 'outline'}
-          className="cursor-pointer"
-          onClick={() => toggleCategory(cat.slug)}
-        >
-          {cat.name}
-        </Badge>
-      ))}
+    <div>
+      <p className="mb-3 text-sm font-semibold text-foreground">场景分类</p>
+      <div className="flex flex-wrap gap-2">
+        {categories.map((cat) => {
+          const active = selectedCategory === cat.slug
+          return (
+            <button
+              key={cat.id}
+              type="button"
+              onClick={() => toggleCategory(cat.slug)}
+              className={`rounded-full border px-3 py-1.5 text-sm transition ${
+                active
+                  ? 'border-primary bg-primary text-primary-foreground'
+                  : 'border-border bg-background/60 text-muted-foreground hover:border-primary hover:text-primary'
+              }`}
+            >
+              {cat.name}
+            </button>
+          )
+        })}
+      </div>
     </div>
   )
 }

@@ -4,7 +4,7 @@
 import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { Button } from '@/components/ui/button'
+import { Heart } from 'lucide-react'
 
 interface FavoriteButtonProps {
   sceneId: string
@@ -18,7 +18,6 @@ export function FavoriteButton({ sceneId, isFavorited: initialFavorited }: Favor
   const [loading, setLoading] = useState(false)
 
   async function handleToggle() {
-    // 未登录跳转登录页
     if (!session?.user) {
       router.push('/auth/signin')
       return
@@ -41,13 +40,18 @@ export function FavoriteButton({ sceneId, isFavorited: initialFavorited }: Favor
   }
 
   return (
-    <Button
-      variant={isFavorited ? 'default' : 'outline'}
+    <button
+      type="button"
       onClick={handleToggle}
       disabled={loading}
-      size="sm"
+      className={`inline-flex w-full items-center justify-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition ${
+        isFavorited
+          ? 'border-primary bg-primary text-primary-foreground'
+          : 'border-border bg-background/70 text-foreground hover:border-primary hover:text-primary'
+      }`}
     >
-      {isFavorited ? '已收藏' : '收藏'}
-    </Button>
+      <Heart className="h-4 w-4" />
+      {isFavorited ? '已收藏' : '收藏场景'}
+    </button>
   )
 }

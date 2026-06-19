@@ -1,4 +1,4 @@
-// 媒体管理页面 — 列表、新建、删除
+﻿// 媒体管理页面 — 列表、新建、删除
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -102,31 +102,31 @@ export default function AdminMediaPage() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-zinc-900">媒体管理</h1>
+        <h1 className="text-2xl font-bold text-foreground">媒体管理</h1>
         {canCreateEdit && <Button onClick={() => setShowCreate(true)}>新建媒体</Button>}
       </div>
 
       {/* 新建表单 */}
       {showCreate && (
-        <div className="rounded-lg border bg-white p-4 space-y-3">
-          <h2 className="font-semibold text-zinc-900">新建媒体资源</h2>
+        <div className="rounded-lg border bg-card p-4 space-y-3">
+          <h2 className="font-semibold text-foreground">新建媒体资源</h2>
           <div>
-            <label className="mb-1 block text-xs text-zinc-500">URL *</label>
+            <label className="mb-1 block text-xs text-muted-foreground">URL *</label>
             <input className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.url} onChange={(e) => setForm({ ...form, url: e.target.value })} placeholder="https://..." />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="mb-1 block text-xs text-zinc-500">Alt 文本</label>
+              <label className="mb-1 block text-xs text-muted-foreground">Alt 文本</label>
               <input className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.alt} onChange={(e) => setForm({ ...form, alt: e.target.value })} />
             </div>
             <div>
-              <label className="mb-1 block text-xs text-zinc-500">用途</label>
+              <label className="mb-1 block text-xs text-muted-foreground">用途</label>
               <input className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.purpose} onChange={(e) => setForm({ ...form, purpose: e.target.value })} />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="mb-1 block text-xs text-zinc-500">关联场景</label>
+              <label className="mb-1 block text-xs text-muted-foreground">关联场景</label>
               <select className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.sceneId} onChange={(e) => setForm({ ...form, sceneId: e.target.value })}>
                 <option value="">无</option>
                 {scenes.map((s) => (
@@ -135,7 +135,7 @@ export default function AdminMediaPage() {
               </select>
             </div>
             <div>
-              <label className="mb-1 block text-xs text-zinc-500">关联节点 ID</label>
+              <label className="mb-1 block text-xs text-muted-foreground">关联节点 ID</label>
               <input className="w-full rounded-md border px-3 py-1.5 text-sm" value={form.nodeId} onChange={(e) => setForm({ ...form, nodeId: e.target.value })} placeholder="可选" />
             </div>
           </div>
@@ -150,9 +150,9 @@ export default function AdminMediaPage() {
         </div>
       )}
 
-      <div className="rounded-lg border bg-white overflow-x-auto">
+      <div className="rounded-lg border bg-card overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="border-b bg-zinc-50 text-left text-xs text-zinc-500">
+          <thead className="border-b bg-muted text-left text-xs text-muted-foreground">
             <tr>
               <th className="px-4 py-2">URL</th>
               <th className="px-4 py-2">Alt</th>
@@ -166,10 +166,10 @@ export default function AdminMediaPage() {
             {media.map((m) => (
               <tr key={m.id} className="border-b last:border-0">
                 <td className="max-w-[200px] truncate px-4 py-2 text-blue-600">{m.url}</td>
-                <td className="px-4 py-2 text-zinc-500">{m.alt || '-'}</td>
-                <td className="px-4 py-2 text-zinc-500">{m.purpose || '-'}</td>
-                <td className="px-4 py-2 text-zinc-500">{m.scene?.title || '-'}</td>
-                <td className="px-4 py-2 text-zinc-500">{m.node?.title || '-'}</td>
+                <td className="px-4 py-2 text-muted-foreground">{m.alt || '-'}</td>
+                <td className="px-4 py-2 text-muted-foreground">{m.purpose || '-'}</td>
+                <td className="px-4 py-2 text-muted-foreground">{m.scene?.title || '-'}</td>
+                <td className="px-4 py-2 text-muted-foreground">{m.node?.title || '-'}</td>
                 <td className="px-4 py-2">
                   {isAdmin && (
                     <button onClick={() => handleDelete(m.id)} className="text-xs text-red-600 hover:underline">删除</button>
@@ -179,7 +179,7 @@ export default function AdminMediaPage() {
             ))}
             {media.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-zinc-500">暂无媒体资源</td>
+                <td colSpan={6} className="px-4 py-8 text-center text-muted-foreground">暂无媒体资源</td>
               </tr>
             )}
           </tbody>

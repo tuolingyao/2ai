@@ -1,4 +1,4 @@
-// 场景编辑页 — 基本信息 + 四阶段编辑 + 节点列表
+﻿// 场景编辑页 — 基本信息 + 四阶段编辑 + 节点列表
 'use client'
 
 import { useState, useEffect, use } from 'react'
@@ -209,7 +209,7 @@ export default function AdminSceneEditPage({
   }
 
   if (loading) {
-    return <p className="text-zinc-500">加载中...</p>
+    return <p className="text-muted-foreground">加载中...</p>
   }
 
   if (!scene) {
@@ -220,10 +220,10 @@ export default function AdminSceneEditPage({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Link href="/admin/scenes" className="text-sm text-zinc-500 hover:text-zinc-900">
+          <Link href="/admin/scenes" className="text-sm text-muted-foreground hover:text-foreground">
             &larr; 返回列表
           </Link>
-          <h1 className="text-2xl font-bold text-zinc-900">编辑场景</h1>
+          <h1 className="text-2xl font-bold text-foreground">编辑场景</h1>
         </div>
         <div className="flex items-center gap-2">
           {!isReviewer && (
@@ -240,13 +240,13 @@ export default function AdminSceneEditPage({
       </div>
 
       {/* ===== 基本信息 ===== */}
-      <div className="rounded-lg border bg-white p-4 space-y-4">
-        <h2 className="font-semibold text-zinc-900">基本信息</h2>
+      <div className="rounded-lg border bg-card p-4 space-y-4">
+        <h2 className="font-semibold text-foreground">基本信息</h2>
         {!isReviewer ? (
           <>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="mb-1 block text-xs text-zinc-500">标题</label>
+                <label className="mb-1 block text-xs text-muted-foreground">标题</label>
                 <input
                   className="w-full rounded-md border px-3 py-1.5 text-sm"
                   value={scene.title}
@@ -254,7 +254,7 @@ export default function AdminSceneEditPage({
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs text-zinc-500">Slug</label>
+                <label className="mb-1 block text-xs text-muted-foreground">Slug</label>
                 <input
                   className="w-full rounded-md border px-3 py-1.5 text-sm"
                   value={scene.slug}
@@ -263,7 +263,7 @@ export default function AdminSceneEditPage({
               </div>
             </div>
             <div>
-              <label className="mb-1 block text-xs text-zinc-500">摘要</label>
+              <label className="mb-1 block text-xs text-muted-foreground">摘要</label>
               <textarea
                 className="w-full rounded-md border px-3 py-1.5 text-sm"
                 rows={2}
@@ -273,7 +273,7 @@ export default function AdminSceneEditPage({
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="mb-1 block text-xs text-zinc-500">适合人群</label>
+                <label className="mb-1 block text-xs text-muted-foreground">适合人群</label>
                 <input
                   className="w-full rounded-md border px-3 py-1.5 text-sm"
                   value={scene.suitableFor}
@@ -281,7 +281,7 @@ export default function AdminSceneEditPage({
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs text-zinc-500">不适合人群</label>
+                <label className="mb-1 block text-xs text-muted-foreground">不适合人群</label>
                 <input
                   className="w-full rounded-md border px-3 py-1.5 text-sm"
                   value={scene.notSuitableFor}
@@ -291,7 +291,7 @@ export default function AdminSceneEditPage({
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="mb-1 block text-xs text-zinc-500">封面图 URL</label>
+                <label className="mb-1 block text-xs text-muted-foreground">封面图 URL</label>
                 <input
                   className="w-full rounded-md border px-3 py-1.5 text-sm"
                   value={scene.coverImage || ''}
@@ -299,7 +299,7 @@ export default function AdminSceneEditPage({
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs text-zinc-500">发布状态</label>
+                <label className="mb-1 block text-xs text-muted-foreground">发布状态</label>
                 <select
                   className="w-full rounded-md border px-3 py-1.5 text-sm"
                   value={scene.publishStatus}
@@ -318,7 +318,7 @@ export default function AdminSceneEditPage({
             </div>
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <label className="mb-1 block text-xs text-zinc-500">排序</label>
+                <label className="mb-1 block text-xs text-muted-foreground">排序</label>
                 <input
                   type="number"
                   className="w-full rounded-md border px-3 py-1.5 text-sm"
@@ -327,7 +327,7 @@ export default function AdminSceneEditPage({
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs text-zinc-500">推荐</label>
+                <label className="mb-1 block text-xs text-muted-foreground">推荐</label>
                 <select
                   className="w-full rounded-md border px-3 py-1.5 text-sm"
                   value={scene.isRecommended ? 'true' : 'false'}
@@ -340,7 +340,7 @@ export default function AdminSceneEditPage({
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="mb-1 block text-xs text-zinc-500">SEO Title</label>
+                <label className="mb-1 block text-xs text-muted-foreground">SEO Title</label>
                 <input
                   className="w-full rounded-md border px-3 py-1.5 text-sm"
                   value={scene.seoTitle || ''}
@@ -348,7 +348,7 @@ export default function AdminSceneEditPage({
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs text-zinc-500">SEO Description</label>
+                <label className="mb-1 block text-xs text-muted-foreground">SEO Description</label>
                 <input
                   className="w-full rounded-md border px-3 py-1.5 text-sm"
                   value={scene.seoDescription || ''}
@@ -361,7 +361,7 @@ export default function AdminSceneEditPage({
           <>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="mb-1 block text-xs text-zinc-500">发布状态</label>
+                <label className="mb-1 block text-xs text-muted-foreground">发布状态</label>
                 <select
                   className="w-full rounded-md border px-3 py-1.5 text-sm"
                   value={scene.publishStatus}
@@ -373,7 +373,7 @@ export default function AdminSceneEditPage({
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-xs text-zinc-500">推荐</label>
+                <label className="mb-1 block text-xs text-muted-foreground">推荐</label>
                 <select
                   className="w-full rounded-md border px-3 py-1.5 text-sm"
                   value={scene.isRecommended ? 'true' : 'false'}
@@ -391,20 +391,20 @@ export default function AdminSceneEditPage({
       {/* ===== 四阶段编辑 ===== */}
       {!isReviewer && (
       <div className="space-y-3">
-        <h2 className="text-lg font-semibold text-zinc-900">四阶段内容</h2>
+        <h2 className="text-lg font-semibold text-foreground">四阶段内容</h2>
         {scene.stages.map((stage) => {
           const isExpanded = expandedStages.has(stage.id)
           return (
-            <div key={stage.id} className="rounded-lg border bg-white">
+            <div key={stage.id} className="rounded-lg border bg-card">
               {/* 阶段标题栏 */}
               <button
                 onClick={() => toggleStage(stage.id)}
                 className="flex w-full items-center justify-between px-4 py-3 text-left"
               >
-                <span className="font-medium text-zinc-900">
+                <span className="font-medium text-foreground">
                   {stageTypeLabels[stage.stageType] || stage.stageType}
                 </span>
-                <span className="text-xs text-zinc-500">
+                <span className="text-xs text-muted-foreground">
                   {isExpanded ? '收起' : '展开'} | {stage.nodes.length} 个节点
                 </span>
               </button>
@@ -414,7 +414,7 @@ export default function AdminSceneEditPage({
                 <div className="border-t px-4 py-4 space-y-3">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="mb-1 block text-xs text-zinc-500">能力标准</label>
+                      <label className="mb-1 block text-xs text-muted-foreground">能力标准</label>
                       <textarea
                         className="w-full rounded-md border px-3 py-1.5 text-sm"
                         rows={2}
@@ -423,7 +423,7 @@ export default function AdminSceneEditPage({
                       />
                     </div>
                     <div>
-                      <label className="mb-1 block text-xs text-zinc-500">学习重点</label>
+                      <label className="mb-1 block text-xs text-muted-foreground">学习重点</label>
                       <textarea
                         className="w-full rounded-md border px-3 py-1.5 text-sm"
                         rows={2}
@@ -434,7 +434,7 @@ export default function AdminSceneEditPage({
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="mb-1 block text-xs text-zinc-500">练习任务</label>
+                      <label className="mb-1 block text-xs text-muted-foreground">练习任务</label>
                       <textarea
                         className="w-full rounded-md border px-3 py-1.5 text-sm"
                         rows={2}
@@ -443,7 +443,7 @@ export default function AdminSceneEditPage({
                       />
                     </div>
                     <div>
-                      <label className="mb-1 block text-xs text-zinc-500">能力证据</label>
+                      <label className="mb-1 block text-xs text-muted-foreground">能力证据</label>
                       <textarea
                         className="w-full rounded-md border px-3 py-1.5 text-sm"
                         rows={2}
@@ -454,7 +454,7 @@ export default function AdminSceneEditPage({
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="mb-1 block text-xs text-zinc-500">AI 介入方式</label>
+                      <label className="mb-1 block text-xs text-muted-foreground">AI 介入方式</label>
                       <textarea
                         className="w-full rounded-md border px-3 py-1.5 text-sm"
                         rows={2}
@@ -463,7 +463,7 @@ export default function AdminSceneEditPage({
                       />
                     </div>
                     <div>
-                      <label className="mb-1 block text-xs text-zinc-500">常见未达标原因</label>
+                      <label className="mb-1 block text-xs text-muted-foreground">常见未达标原因</label>
                       <textarea
                         className="w-full rounded-md border px-3 py-1.5 text-sm"
                         rows={2}
@@ -473,7 +473,7 @@ export default function AdminSceneEditPage({
                     </div>
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs text-zinc-500">补强动作</label>
+                    <label className="mb-1 block text-xs text-muted-foreground">补强动作</label>
                     <textarea
                       className="w-full rounded-md border px-3 py-1.5 text-sm"
                       rows={2}
@@ -493,11 +493,11 @@ export default function AdminSceneEditPage({
                   {/* 阶段下的节点列表 */}
                   {stage.nodes.length > 0 && (
                     <div className="mt-4">
-                      <h3 className="mb-2 text-sm font-medium text-zinc-700">学习节点</h3>
+                      <h3 className="mb-2 text-sm font-medium text-muted-foreground">学习节点</h3>
                       <div className="space-y-1">
                         {stage.nodes.map((node) => (
-                          <div key={node.id} className="flex items-center justify-between rounded-md bg-zinc-50 px-3 py-1.5 text-sm">
-                            <span className="text-zinc-800">{node.title}</span>
+                          <div key={node.id} className="flex items-center justify-between rounded-md bg-muted px-3 py-1.5 text-sm">
+                            <span className="text-foreground">{node.title}</span>
                             <span className="text-xs text-zinc-400">{node.slug}</span>
                           </div>
                         ))}
@@ -516,18 +516,18 @@ export default function AdminSceneEditPage({
       <QualityCheckPanel sceneId={id} canPublish={canPublishScene} />
 
       {/* ===== 节点列表 ===== */}
-      <div className="rounded-lg border bg-white overflow-x-auto">
+      <div className="rounded-lg border bg-card overflow-x-auto">
         <div className="flex items-center justify-between border-b px-4 py-3">
-          <h2 className="font-semibold text-zinc-900">所有学习节点</h2>
+          <h2 className="font-semibold text-foreground">所有学习节点</h2>
           <Link href="/admin/nodes" className="text-sm text-blue-600 hover:underline">
             管理节点 &rarr;
           </Link>
         </div>
         {scene.nodes.length === 0 ? (
-          <p className="p-4 text-sm text-zinc-500">暂无节点</p>
+          <p className="p-4 text-sm text-muted-foreground">暂无节点</p>
         ) : (
           <table className="w-full text-sm">
-            <thead className="border-b bg-zinc-50 text-left text-xs text-zinc-500">
+            <thead className="border-b bg-muted text-left text-xs text-muted-foreground">
               <tr>
                 <th className="px-4 py-2">标题</th>
                 <th className="px-4 py-2">Slug</th>
@@ -537,9 +537,9 @@ export default function AdminSceneEditPage({
             <tbody>
               {scene.nodes.map((node) => (
                 <tr key={node.id} className="border-b last:border-0">
-                  <td className="px-4 py-2 text-zinc-800">{node.title}</td>
-                  <td className="px-4 py-2 text-zinc-500">{node.slug}</td>
-                  <td className="px-4 py-2 text-zinc-500">{node.sortOrder}</td>
+                  <td className="px-4 py-2 text-foreground">{node.title}</td>
+                  <td className="px-4 py-2 text-muted-foreground">{node.slug}</td>
+                  <td className="px-4 py-2 text-muted-foreground">{node.sortOrder}</td>
                 </tr>
               ))}
             </tbody>
