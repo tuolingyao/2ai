@@ -94,6 +94,18 @@ enum PublishStatus {
   OFFLINE
 }
 
+enum ToolPricing {
+  FREE
+  FREEMIUM
+  PAID
+}
+
+enum ToolDifficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
 model Scene {
   id             String        @id @default(cuid())
   title          String
@@ -117,6 +129,7 @@ model Scene {
   taxonomies    SceneTaxonomy[]
   mediaAssets   MediaAsset[]
   favorites     UserFavorite[]
+  aiTools       AiToolScene[]
 
   @@map("scenes")
 }
@@ -258,6 +271,63 @@ model SceneTaxonomy {
 
   @@id([sceneId, taxonomyId])
   @@map("scene_taxonomies")
+}
+
+model AiToolCategory {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tools AiTool[]
+
+  @@map("ai_tool_categories")
+}
+
+model AiTool {
+  id             String         @id @default(cuid())
+  categoryId     String
+  name           String
+  slug           String         @unique
+  tagline        String
+  description    String
+  websiteUrl     String
+  logoUrl        String?
+  pricing        ToolPricing
+  difficulty     ToolDifficulty
+  bestFor        String
+  notFor         String?
+  whyRecommended String
+  quickStart     String
+  promptExample  String?
+  sortOrder      Int            @default(0)
+  isTop          Boolean        @default(true)
+  publishStatus  PublishStatus  @default(DRAFT)
+  seoTitle       String?
+  seoDescription String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  category AiToolCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  scenes   AiToolScene[]
+
+  @@map("ai_tools")
+}
+
+model AiToolScene {
+  id      String @id @default(cuid())
+  toolId  String
+  sceneId String
+
+  tool  AiTool @relation(fields: [toolId], references: [id], onDelete: Cascade)
+  scene Scene  @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+
+  @@unique([toolId, sceneId])
+  @@map("ai_tool_scenes")
 }
 
 // ==================== 媒体资源 ====================

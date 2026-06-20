@@ -1,5 +1,5 @@
 // Prisma seed 脚本 — 插入测试数据
-import { PrismaClient, UserRole, PublishStatus, StageType, TaxonomyType } from '@prisma/client'
+import { PrismaClient, UserRole, PublishStatus, StageType, TaxonomyType, ToolPricing, ToolDifficulty } from '@prisma/client'
 import { hash } from 'bcryptjs'
 
 const prisma = new PrismaClient()
@@ -11,12 +11,15 @@ async function main() {
   await prisma.capabilityEvidence.deleteMany()
   await prisma.userProgress.deleteMany()
   await prisma.userFavorite.deleteMany()
+  await prisma.aiToolScene.deleteMany()
   await prisma.aiDialogueExample.deleteMany()
   await prisma.toolGuidance.deleteMany()
   await prisma.learningNode.deleteMany()
   await prisma.stage.deleteMany()
   await prisma.sceneTaxonomy.deleteMany()
   await prisma.mediaAsset.deleteMany()
+  await prisma.aiTool.deleteMany()
+  await prisma.aiToolCategory.deleteMany()
   await prisma.scene.deleteMany()
   await prisma.taxonomy.deleteMany()
   await prisma.user.deleteMany()
@@ -129,6 +132,110 @@ async function main() {
 
   console.log(`  创建了 ${Object.keys(taxonomies).length} 个分类标签`)
 
+  // ==================== AI 工具库 ====================
+  console.log('🧰 创建 AI 工具库...')
+
+  const toolCategorySeeds = [
+    { name: '写作与内容生产', slug: 'writing-content', description: '用于选题、写作、改写、校对和内容生产流程的 AI 工具。' },
+    { name: '搜索与研究', slug: 'search-research', description: '用于资料检索、问题研究、来源整理和信息核验的 AI 工具。' },
+    { name: '办公与效率', slug: 'office-productivity', description: '用于文档、表格、会议、邮件和日常办公提效的 AI 工具。' },
+    { name: '编程与开发', slug: 'coding-development', description: '用于代码生成、调试、重构、文档和开发协作的 AI 工具。' },
+    { name: '设计与视觉', slug: 'design-visual', description: '用于视觉创意、图像生成、版式设计和设计协作的 AI 工具。' },
+    { name: '视频与音频', slug: 'video-audio', description: '用于视频生成、剪辑、配音、转写和音频处理的 AI 工具。' },
+    { name: '个人知识管理', slug: 'knowledge-management', description: '用于笔记整理、知识沉淀、资料问答和个人知识库建设的 AI 工具。' },
+    { name: '自动化与 Agent', slug: 'automation-agent', description: '用于工作流自动化、多步骤任务执行和智能体编排的 AI 工具。' },
+  ]
+
+  const toolCategories = new Map<string, { id: string }>()
+  for (let i = 0; i < toolCategorySeeds.length; i++) {
+    const category = await prisma.aiToolCategory.upsert({
+      where: { slug: toolCategorySeeds[i].slug },
+      update: {
+        name: toolCategorySeeds[i].name,
+        description: toolCategorySeeds[i].description,
+        sortOrder: i,
+        isActive: true,
+      },
+      create: {
+        ...toolCategorySeeds[i],
+        sortOrder: i,
+      },
+    })
+    toolCategories.set(category.slug, category)
+  }
+
+  const aiToolSeeds = [
+    { categorySlug: 'writing-content', name: 'Notion AI', slug: 'notion-ai', tagline: '在文档与知识库中完成写作和整理。', description: 'Notion AI 适合在已有笔记、项目文档和团队知识库中直接改写、总结和生成内容。它的优势是贴近文档工作流，减少复制粘贴。', websiteUrl: 'https://www.notion.so/product/ai', pricing: ToolPricing.FREEMIUM, difficulty: ToolDifficulty.BEGINNER, bestFor: '文档写作、会议纪要整理、知识库内容改写', notFor: '需要复杂事实核验或高强度长文创作的任务', whyRecommended: '适合把 AI 嵌入日常文档流程，学习成本低。', quickStart: '1. 打开一篇已有文档\n2. 选中段落让 AI 总结或改写\n3. 保存可复用的写作模板' },
+    { categorySlug: 'writing-content', name: '秘塔写作猫', slug: 'xiezuocat', tagline: '中文写作校对与润色助手。', description: '秘塔写作猫适合中文文本纠错、润色、续写和风格优化。它对中文表达和病句检查较友好。', websiteUrl: 'https://xiezuocat.com', pricing: ToolPricing.FREEMIUM, difficulty: ToolDifficulty.BEGINNER, bestFor: '中文文章润色、错别字检查、表达优化', notFor: '复杂多轮内容策划或深度研究', whyRecommended: '中文写作场景上手快，适合内容发布前检查。', quickStart: '1. 粘贴待检查文本\n2. 查看纠错与润色建议\n3. 保留符合自己语气的修改' },
+    { categorySlug: 'writing-content', name: 'Grammarly', slug: 'grammarly', tagline: '英文写作语法与语气优化工具。', description: 'Grammarly 面向英文邮件、文档和营销文案，能检查语法、拼写和语气。它适合需要稳定英文输出的人。', websiteUrl: 'https://www.grammarly.com', pricing: ToolPricing.FREEMIUM, difficulty: ToolDifficulty.BEGINNER, bestFor: '英文邮件、英文报告、跨境沟通文案', notFor: '中文写作或强创意长文生成', whyRecommended: '英文表达质量提升明显，适合职场沟通。', quickStart: '1. 安装浏览器插件\n2. 在邮件或文档中输入英文\n3. 根据语气目标接受修改' },
+    { categorySlug: 'search-research', name: 'Perplexity', slug: 'perplexity', tagline: '带来源引用的 AI 搜索与研究工具。', description: 'Perplexity 适合围绕问题快速检索资料并查看来源链接。它比普通聊天更适合做初步研究。', websiteUrl: 'https://www.perplexity.ai', pricing: ToolPricing.FREEMIUM, difficulty: ToolDifficulty.BEGINNER, bestFor: '主题调研、资料检索、竞品信息初筛', notFor: '不能替代权威数据库和人工事实核验', whyRecommended: '结果带引用，适合作为研究入口。', quickStart: '1. 用完整问题发起搜索\n2. 打开引用来源核对\n3. 追问让它整理成提纲' },
+    { categorySlug: 'search-research', name: 'Consensus', slug: 'consensus', tagline: '面向学术论文的 AI 检索助手。', description: 'Consensus 适合查找研究论文和总结研究结论。它更适合学术与专业主题，不适合泛娱乐搜索。', websiteUrl: 'https://consensus.app', pricing: ToolPricing.FREEMIUM, difficulty: ToolDifficulty.INTERMEDIATE, bestFor: '论文检索、研究结论对比、专业主题调研', notFor: '即时新闻、中文本地资料和非学术内容', whyRecommended: '能帮助用户从论文视角建立证据意识。', quickStart: '1. 输入具体研究问题\n2. 查看论文摘要和结论\n3. 记录仍需人工核验的来源' },
+    { categorySlug: 'search-research', name: 'Elicit', slug: 'elicit', tagline: '用 AI 辅助文献综述和研究表格。', description: 'Elicit 面向研究人员，适合从论文中提取变量、结论和方法。它适合较复杂的资料整理任务。', websiteUrl: 'https://elicit.com', pricing: ToolPricing.FREEMIUM, difficulty: ToolDifficulty.INTERMEDIATE, bestFor: '文献综述、论文表格整理、研究问题拆解', notFor: '普通网页搜索和轻量内容创作', whyRecommended: '适合训练结构化研究能力。', quickStart: '1. 输入研究问题\n2. 选择相关论文\n3. 导出表格并人工复核' },
+    { categorySlug: 'office-productivity', name: 'Microsoft Copilot', slug: 'microsoft-copilot', tagline: '面向 Office 工作流的 AI 助手。', description: 'Microsoft Copilot 适合在 Word、Excel、PowerPoint 和 Teams 中提升办公效率。它依赖组织环境和账号权限。', websiteUrl: 'https://www.microsoft.com/microsoft-copilot', pricing: ToolPricing.PAID, difficulty: ToolDifficulty.BEGINNER, bestFor: '文档总结、表格分析、PPT 初稿、会议整理', notFor: '没有 Microsoft 生态的个人轻量使用', whyRecommended: '覆盖常见办公入口，适合企业场景。', quickStart: '1. 在 Word 或 Excel 打开 Copilot\n2. 输入明确任务\n3. 人工检查数据和措辞' },
+    { categorySlug: 'office-productivity', name: 'WPS AI', slug: 'wps-ai', tagline: '中文办公文档中的 AI 助手。', description: 'WPS AI 适合中文办公用户在文档、表格和演示中生成内容。它对国内办公习惯更贴近。', websiteUrl: 'https://ai.wps.cn', pricing: ToolPricing.FREEMIUM, difficulty: ToolDifficulty.BEGINNER, bestFor: '中文报告、表格处理、演示文稿初稿', notFor: '高度定制的数据系统分析', whyRecommended: '适合国内职场用户快速接入。', quickStart: '1. 打开 WPS 文档\n2. 选择 AI 写作或总结\n3. 按模板改成自己的业务内容' },
+    { categorySlug: 'office-productivity', name: 'Otter.ai', slug: 'otter-ai', tagline: '会议录音转写与纪要生成工具。', description: 'Otter.ai 适合英文会议转写、摘要和行动项整理。它能减少会后整理成本。', websiteUrl: 'https://otter.ai', pricing: ToolPricing.FREEMIUM, difficulty: ToolDifficulty.BEGINNER, bestFor: '英文会议转写、纪要、行动项整理', notFor: '中文会议或强隐私会议场景', whyRecommended: '会议场景价值直接，易验证效果。', quickStart: '1. 连接会议或上传录音\n2. 等待自动转写\n3. 提取行动项并人工确认' },
+    { categorySlug: 'coding-development', name: 'Claude Code', slug: 'claude-code', tagline: '面向代码库任务的终端智能编程助手。', description: 'Claude Code 适合阅读代码库、修改文件、运行验证并协助完成工程任务。它更适合有明确任务卡的开发流程。', websiteUrl: 'https://www.anthropic.com/claude-code', pricing: ToolPricing.PAID, difficulty: ToolDifficulty.INTERMEDIATE, bestFor: '代码库理解、功能开发、重构、测试修复', notFor: '没有版本控制和验收标准的随意修改', whyRecommended: '适合项目制开发，能和任务卡流程结合。', quickStart: '1. 在项目根目录启动\n2. 提供明确任务卡\n3. 审查 diff 并运行验证命令' },
+    { categorySlug: 'coding-development', name: 'Cursor', slug: 'cursor', tagline: '面向开发者的 AI 代码编辑器。', description: 'Cursor 适合在编辑器内理解项目、批量改代码和生成解释。它适合已有开发基础的人使用。', websiteUrl: 'https://www.cursor.com', pricing: ToolPricing.FREEMIUM, difficulty: ToolDifficulty.INTERMEDIATE, bestFor: '代码补全、项目问答、多文件编辑', notFor: '完全不懂代码且无人审查的生产改动', whyRecommended: '编辑器体验完整，适合日常开发。', quickStart: '1. 打开代码仓库\n2. 用聊天定位文件\n3. 小步修改并运行测试' },
+    { categorySlug: 'coding-development', name: 'GitHub Copilot', slug: 'github-copilot', tagline: 'IDE 内代码补全与开发辅助。', description: 'GitHub Copilot 适合函数补全、测试生成和局部代码解释。它适合提高常规编码速度。', websiteUrl: 'https://github.com/features/copilot', pricing: ToolPricing.PAID, difficulty: ToolDifficulty.BEGINNER, bestFor: '代码补全、样板代码、单元测试草稿', notFor: '缺少人工审查的复杂架构决策', whyRecommended: '集成广泛，适合开发者低摩擦使用。', quickStart: '1. 在 IDE 安装插件\n2. 写清函数名和输入输出\n3. 审查生成代码并测试' },
+    { categorySlug: 'design-visual', name: 'Midjourney', slug: 'midjourney', tagline: '高质量图像生成与视觉创意工具。', description: 'Midjourney 适合概念图、风格探索和视觉灵感生成。它需要较好的提示词描述能力。', websiteUrl: 'https://www.midjourney.com', pricing: ToolPricing.PAID, difficulty: ToolDifficulty.INTERMEDIATE, bestFor: '概念视觉、海报风格探索、插画灵感', notFor: '严格可控的商业设计交付全流程', whyRecommended: '图像质感强，适合视觉探索阶段。', quickStart: '1. 描述主体、风格和构图\n2. 生成多张候选\n3. 迭代提示词选择方向' },
+    { categorySlug: 'design-visual', name: 'Canva AI', slug: 'canva-ai', tagline: '模板化设计中的 AI 创作助手。', description: 'Canva AI 适合非设计师快速制作海报、社媒图和演示页面。它将 AI 生成和模板编辑结合。', websiteUrl: 'https://www.canva.com/ai', pricing: ToolPricing.FREEMIUM, difficulty: ToolDifficulty.BEGINNER, bestFor: '社媒图、海报、演示设计、轻量品牌物料', notFor: '复杂品牌系统和专业印刷交付', whyRecommended: '模板丰富，上手门槛低。', quickStart: '1. 选择目标模板\n2. 用 AI 生成文案或图像\n3. 调整版式并导出' },
+    { categorySlug: 'design-visual', name: 'Krea', slug: 'krea', tagline: '实时图像生成与视觉迭代工具。', description: 'Krea 适合实时生成图像、放大图片和做视觉方向实验。它适合需要快速比较视觉变化的用户。', websiteUrl: 'https://www.krea.ai', pricing: ToolPricing.FREEMIUM, difficulty: ToolDifficulty.INTERMEDIATE, bestFor: '视觉灵感、图片增强、风格迭代', notFor: '完全确定版式的精细排版工作', whyRecommended: '反馈速度快，适合探索多个方向。', quickStart: '1. 上传参考或输入提示词\n2. 调整风格参数\n3. 保存可继续编辑的版本' },
+    { categorySlug: 'video-audio', name: 'Runway', slug: 'runway', tagline: 'AI 视频生成与创意剪辑平台。', description: 'Runway 适合短视频生成、画面延展、抠像和创意视频实验。它适合视觉团队做原型。', websiteUrl: 'https://runwayml.com', pricing: ToolPricing.FREEMIUM, difficulty: ToolDifficulty.INTERMEDIATE, bestFor: '视频生成、镜头实验、创意短片原型', notFor: '长片稳定制作和强一致角色控制', whyRecommended: '视频能力完整，适合探索 AI 视频流程。', quickStart: '1. 准备文字或图片输入\n2. 生成短视频片段\n3. 选择片段继续剪辑' },
+    { categorySlug: 'video-audio', name: 'Descript', slug: 'descript', tagline: '像编辑文档一样编辑音视频。', description: 'Descript 适合播客、课程和短视频的转写、剪辑与字幕处理。它把音视频编辑转成文本编辑流程。', websiteUrl: 'https://www.descript.com', pricing: ToolPricing.FREEMIUM, difficulty: ToolDifficulty.BEGINNER, bestFor: '播客剪辑、字幕、课程视频粗剪', notFor: '复杂影视级后期制作', whyRecommended: '把剪辑门槛降到文字编辑层面。', quickStart: '1. 上传音频或视频\n2. 等待自动转写\n3. 删除文字完成粗剪' },
+    { categorySlug: 'video-audio', name: 'ElevenLabs', slug: 'elevenlabs', tagline: '高质量 AI 语音生成工具。', description: 'ElevenLabs 适合旁白、配音和多语言语音生成。它的声音自然度较高，但需要注意授权和合规。', websiteUrl: 'https://elevenlabs.io', pricing: ToolPricing.FREEMIUM, difficulty: ToolDifficulty.BEGINNER, bestFor: '旁白、课程配音、多语言音频', notFor: '未授权声音克隆或敏感内容', whyRecommended: '语音质量高，适合内容生产流程。', quickStart: '1. 输入旁白文本\n2. 选择合适声音\n3. 导出后检查发音和授权' },
+    { categorySlug: 'knowledge-management', name: 'Mem', slug: 'mem', tagline: '面向个人知识沉淀的 AI 笔记工具。', description: 'Mem 适合收集碎片笔记并通过 AI 找回关联内容。它适合重视个人知识连接的人。', websiteUrl: 'https://mem.ai', pricing: ToolPricing.FREEMIUM, difficulty: ToolDifficulty.BEGINNER, bestFor: '个人笔记、资料沉淀、知识回顾', notFor: '团队级复杂权限知识库', whyRecommended: '强调自动关联，适合建立长期知识资产。', quickStart: '1. 每天记录关键笔记\n2. 用 AI 查询相关内容\n3. 定期整理成主题页面' },
+    { categorySlug: 'knowledge-management', name: 'Tana', slug: 'tana', tagline: '结构化笔记与 AI 知识管理工具。', description: 'Tana 适合用标签、字段和结构化节点管理知识。它功能强但学习成本更高。', websiteUrl: 'https://tana.inc', pricing: ToolPricing.FREEMIUM, difficulty: ToolDifficulty.ADVANCED, bestFor: '结构化知识库、研究笔记、复杂个人系统', notFor: '只需要简单便签的用户', whyRecommended: '适合进阶用户搭建可复用知识系统。', quickStart: '1. 设计少量核心标签\n2. 录入真实笔记\n3. 用 AI 生成摘要和关联' },
+    { categorySlug: 'knowledge-management', name: 'Readwise Reader', slug: 'readwise-reader', tagline: '阅读、标注和知识回收工具。', description: 'Readwise Reader 适合统一管理文章、PDF、邮件和高亮内容。它能帮助把阅读转化为可回顾的知识。', websiteUrl: 'https://readwise.io/read', pricing: ToolPricing.PAID, difficulty: ToolDifficulty.INTERMEDIATE, bestFor: '深度阅读、资料标注、知识回顾', notFor: '一次性浅阅读和纯写作生成', whyRecommended: '适合把输入侧资料长期沉淀。', quickStart: '1. 保存文章或 PDF\n2. 阅读时标注重点\n3. 定期回顾并导出笔记' },
+    { categorySlug: 'automation-agent', name: 'Zapier AI', slug: 'zapier-ai', tagline: '连接应用并自动执行重复流程。', description: 'Zapier AI 适合把表单、邮件、表格和通知连接成自动化流程。它适合无代码自动化场景。', websiteUrl: 'https://zapier.com/ai', pricing: ToolPricing.FREEMIUM, difficulty: ToolDifficulty.INTERMEDIATE, bestFor: '跨应用自动化、通知流、轻量运营流程', notFor: '复杂后端业务系统和强事务流程', whyRecommended: '生态连接丰富，适合快速验证自动化价值。', quickStart: '1. 选择触发应用\n2. 设置 AI 处理步骤\n3. 测试输出再启用' },
+    { categorySlug: 'automation-agent', name: 'Dify', slug: 'dify', tagline: '开源 AI 应用与 Agent 编排平台。', description: 'Dify 适合构建聊天应用、知识库问答和工作流 Agent。它适合团队把 AI 能力产品化。', websiteUrl: 'https://dify.ai', pricing: ToolPricing.FREEMIUM, difficulty: ToolDifficulty.INTERMEDIATE, bestFor: 'AI 应用原型、知识库问答、工作流编排', notFor: '只想使用现成聊天工具的轻量用户', whyRecommended: '兼具低代码和可扩展性，适合产品化验证。', quickStart: '1. 创建应用并选择模型\n2. 添加知识库或工作流\n3. 发布并收集反馈' },
+    { categorySlug: 'automation-agent', name: 'Make', slug: 'make', tagline: '可视化工作流自动化平台。', description: 'Make 适合把多个 SaaS 服务编排成可视化流程。它比简单自动化更灵活，但需要理解流程节点。', websiteUrl: 'https://www.make.com', pricing: ToolPricing.FREEMIUM, difficulty: ToolDifficulty.INTERMEDIATE, bestFor: '营销运营流程、数据同步、跨工具自动化', notFor: '强代码控制或复杂事务系统', whyRecommended: '可视化流程清晰，适合学习自动化思维。', quickStart: '1. 选择触发器\n2. 添加条件和动作\n3. 跑通样例后开启调度' },
+  ]
+
+  const aiTools = new Map<string, { id: string }>()
+  for (let i = 0; i < aiToolSeeds.length; i++) {
+    const seed = aiToolSeeds[i]
+    const category = toolCategories.get(seed.categorySlug)
+    if (!category) throw new Error(`缺少工具分类: ${seed.categorySlug}`)
+    const tool = await prisma.aiTool.upsert({ 
+      where: { slug: seed.slug },
+      update: {
+        categoryId: category.id,
+        name: seed.name,
+        tagline: seed.tagline,
+        description: seed.description,
+        websiteUrl: seed.websiteUrl,
+        pricing: seed.pricing,
+        difficulty: seed.difficulty,
+        bestFor: seed.bestFor,
+        notFor: seed.notFor,
+        whyRecommended: seed.whyRecommended,
+        quickStart: seed.quickStart,
+        sortOrder: i,
+        publishStatus: PublishStatus.PUBLISHED,
+      },
+      create: {
+        categoryId: category.id,
+        name: seed.name,
+        slug: seed.slug,
+        tagline: seed.tagline,
+        description: seed.description,
+        websiteUrl: seed.websiteUrl,
+        pricing: seed.pricing,
+        difficulty: seed.difficulty,
+        bestFor: seed.bestFor,
+        notFor: seed.notFor,
+        whyRecommended: seed.whyRecommended,
+        quickStart: seed.quickStart,
+        sortOrder: i,
+        publishStatus: PublishStatus.PUBLISHED,
+      },
+    })
+    aiTools.set(seed.slug, tool)
+  }
+
+  console.log(`  创建了 ${toolCategorySeeds.length} 个工具分类`)
+  console.log(`  创建了 ${aiToolSeeds.length} 个 AI 工具`)
+
   // ==================== 草稿场景：数据分析 ====================
   console.log('🎬 创建草稿场景...')
 
@@ -185,6 +292,14 @@ async function main() {
   })
 
   console.log(`  创建已发布场景: ${wechatScene.title}`)
+
+  await prisma.aiToolScene.createMany({
+    data: ['notion-ai', 'xiezuocat', 'perplexity', 'canva-ai', 'dify']
+      .map((slug) => aiTools.get(slug))
+      .filter((tool): tool is { id: string } => Boolean(tool))
+      .map((tool) => ({ toolId: tool.id, sceneId: wechatScene.id })),
+    skipDuplicates: true,
+  })
 
   // 关联分类标签
   await prisma.sceneTaxonomy.createMany({
@@ -635,6 +750,14 @@ async function main() {
 
   console.log(`  创建已发布场景: ${workplaceScene.title}`)
 
+  await prisma.aiToolScene.createMany({
+    data: ['microsoft-copilot', 'wps-ai', 'otter-ai', 'zapier-ai', 'make']
+      .map((slug) => aiTools.get(slug))
+      .filter((tool): tool is { id: string } => Boolean(tool))
+      .map((tool) => ({ toolId: tool.id, sceneId: workplaceScene.id })),
+    skipDuplicates: true,
+  })
+
   // 关联标签
   await prisma.sceneTaxonomy.createMany({
     data: [
@@ -854,6 +977,8 @@ async function main() {
   console.log('🎉 Seed 完成！')
   console.log(`  用户: ${users.length}`)
   console.log(`  分类标签: ${Object.keys(taxonomies).length}`)
+  console.log(`  AI 工具分类: ${toolCategorySeeds.length}`)
+  console.log(`  AI 工具: ${aiToolSeeds.length}`)
   console.log(`  场景: 4 (1 草稿 + 3 已发布)`)
   console.log(`  阶段: 4 (公众号) + 4 (职场效率) + 4 (编程辅助) + 4 (草稿) = 16`)
   console.log(`  学习节点: 8 (公众号) + 2 (职场效率) = 10`)

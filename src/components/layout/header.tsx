@@ -24,6 +24,9 @@ export function Header() {
             <Link href="/scenes" className="text-sm text-muted-foreground hover:text-primary">
               场景库
             </Link>
+            <Link href="/tools" className="text-sm text-muted-foreground hover:text-primary">
+              工具库
+            </Link>
           </nav>
         </div>
 

@@ -8,6 +8,7 @@ import { prisma } from '@/lib/prisma'
 import { Badge } from '@/components/ui/badge'
 import { StageTimeline } from '@/components/stage-timeline'
 import { StageSection } from '@/components/stage-section'
+import { RelatedTools } from '@/components/tool-library/related-tools'
 
 // 动态生成 metadata — 优先使用 seoTitle/seoDescription
 export async function generateMetadata({
@@ -76,6 +77,15 @@ export default async function SceneDetailPage({
           },
         },
       },
+      aiTools: {
+        include: {
+          tool: {
+            include: {
+              category: true,
+            },
+          },
+        },
+      },
     },
   })
 
@@ -98,6 +108,12 @@ export default async function SceneDetailPage({
     ...stage,
     nodes: stage.nodes.map((node) => ({ ...node, sceneSlug })),
   }))
+
+  // 过滤已发布的关联工具
+  const relatedTools = scene.aiTools
+    .filter(({ tool }) => tool.publishStatus === 'PUBLISHED')
+    .map(({ tool }) => tool)
+    .slice(0, 5)
 
   // 查询登录用户的阶段完成状态
   type StageProgressMap = Record<string, { completedNodes: number; totalNodes: number; isCompleted: boolean; inProgressCount: number }>
@@ -248,6 +264,8 @@ export default async function SceneDetailPage({
               />
             ))}
           </div>
+
+          <RelatedTools tools={relatedTools} />
 
           <div className="mt-10 rounded-[2rem] border border-border bg-card/80 p-8">
             <h2 className="mb-3 text-xl font-black text-foreground">走完后你会掌握...</h2>

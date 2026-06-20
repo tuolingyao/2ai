@@ -30,16 +30,16 @@ export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
 
       {/* 侧边栏 */}
       <aside
-        className={`fixed left-0 top-0 z-30 flex h-full w-60 flex-col bg-zinc-900 text-white transition-transform lg:static lg:translate-x-0 ${
+        className={`fixed left-0 top-0 z-30 flex h-full w-60 flex-col border-r border-border bg-card text-foreground transition-transform lg:static lg:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* Logo */}
-        <div className="flex h-14 items-center justify-between border-b border-zinc-700 px-4">
-          <Link href="/admin" className="text-lg font-bold">
+        <div className="flex h-14 items-center justify-between border-b border-border px-4">
+          <Link href="/admin" className="text-lg font-bold text-foreground">
             AI之翼管理
           </Link>
-          <button onClick={onClose} className="lg:hidden text-zinc-400 hover:text-white">
+          <button onClick={onClose} className="text-muted-foreground hover:text-foreground lg:hidden">
             ✕
           </button>
         </div>
@@ -55,8 +55,8 @@ export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
                 onClick={onClose}
                 className={`block rounded-md px-3 py-2 text-sm ${
                   isActive
-                    ? 'bg-zinc-700 text-white'
-                    : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                 }`}
               >
                 {item.label}
@@ -69,7 +69,7 @@ export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
         <div className="border-t border-zinc-700 p-3">
           <Link
             href="/"
-            className="block rounded-md px-3 py-2 text-sm text-zinc-400 hover:bg-zinc-800 hover:text-white"
+            className="block rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
           >
             ← 返回前台
           </Link>
@@ -84,7 +84,7 @@ export function SidebarToggle({ onClick }: { onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      className="rounded-md p-1.5 text-zinc-600 hover:bg-zinc-100 lg:hidden"
+      className="rounded-md p-1.5 text-muted-foreground hover:bg-muted lg:hidden"
     >
       <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
