@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import { ToolCard } from '@/components/tool-library/tool-card'
 import { RelatedScenes } from '@/components/tool-library/related-scenes'
+import { StarRating } from '@/components/tool-library/star-rating'
+import { ToolScreenshots } from '@/components/tool-library/tool-screenshots'
 
 const pricingLabels = {
   FREE: '免费',
@@ -33,6 +35,19 @@ export async function generateMetadata({
     title: tool.seoTitle || `${tool.name} — AI 工具库`,
     description: tool.seoDescription || tool.tagline,
   }
+}
+
+function parseItems(text: string): string[] {
+  return text.split('\n').map((l) => l.replace(/^\d+\.\s*/, '').trim()).filter(Boolean)
+}
+
+function parsePromptExamples(text: string): { label: string; content: string }[] {
+  const blocks = text.split(/【场景\d+[:：]/).filter(Boolean)
+  return blocks.map((block) => {
+    const labelEnd = block.indexOf('】')
+    if (labelEnd === -1) return { label: '提示词', content: block.trim() }
+    return { label: block.slice(0, labelEnd).trim(), content: block.slice(labelEnd + 1).trim() }
+  })
 }
 
 export default async function ToolDetailPage({
@@ -69,7 +84,11 @@ export default async function ToolDetailPage({
     take: 4,
   })
 
-  const quickStartSteps = tool.quickStart.split('\n').filter(Boolean)
+  const bestForItems = parseItems(tool.bestFor)
+  const notForItems = tool.notFor ? parseItems(tool.notFor) : []
+  const whyRecItems = parseItems(tool.whyRecommended)
+  const quickStartSteps = parseItems(tool.quickStart)
+  const promptExamples = tool.promptExample ? parsePromptExamples(tool.promptExample) : []
 
   return (
     <div className="min-h-screen bg-background">
@@ -79,6 +98,11 @@ export default async function ToolDetailPage({
             <span className="seal-stamp rounded-sm bg-background/70 text-xs">{tool.category.name}</span>
             <h1 className="mt-6 text-4xl font-black leading-tight text-foreground sm:text-6xl">{tool.name}</h1>
             <p className="mt-5 max-w-3xl text-lg leading-8 text-muted-foreground">{tool.tagline}</p>
+            {tool.recommendationScore && (
+              <div className="mt-4">
+                <StarRating score={tool.recommendationScore} size="md" showLabel />
+              </div>
+            )}
           </div>
           <div className="rounded-3xl border border-border bg-card/90 p-6">
             <div className="flex flex-wrap gap-2">
@@ -97,42 +121,74 @@ export default async function ToolDetailPage({
         </div>
       </section>
 
+      {tool.screenshotUrls.length > 0 && (
+        <section className="mx-auto max-w-7xl px-4 pt-8">
+          <ToolScreenshots urls={tool.screenshotUrls} name={tool.name} />
+        </section>
+      )}
+
       <main className="px-4 py-12 sm:py-16">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[minmax(0,1fr)_360px]">
           <div className="space-y-6">
             <section className="rounded-3xl border border-border bg-card p-6">
               <h2 className="text-xl font-bold text-foreground">适合做什么</h2>
-              <p className="mt-3 leading-7 text-muted-foreground">{tool.bestFor}</p>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                {bestForItems.map((item, i) => (
+                  <div key={i} className="rounded-2xl border border-border bg-background/70 p-4 text-sm leading-6 text-muted-foreground">
+                    {item}
+                  </div>
+                ))}
+              </div>
             </section>
 
-            {tool.notFor && (
+            {/* 不适合做什么 — 警示卡片 */}
+            {notForItems.length > 0 && (
               <section className="rounded-3xl border border-border bg-card p-6">
                 <h2 className="text-xl font-bold text-foreground">不适合做什么</h2>
-                <p className="mt-3 leading-7 text-muted-foreground">{tool.notFor}</p>
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  {notForItems.map((item, i) => (
+                    <div key={i} className="rounded-2xl border border-destructive/30 bg-destructive/5 p-4 text-sm leading-6 text-muted-foreground">
+                      {item}
+                    </div>
+                  ))}
+                </div>
               </section>
             )}
 
             <section className="rounded-3xl border border-border bg-card p-6">
               <h2 className="text-xl font-bold text-foreground">为什么推荐</h2>
-              <p className="mt-3 leading-7 text-muted-foreground">{tool.whyRecommended}</p>
+              <div className="mt-4 space-y-3">
+                {whyRecItems.map((item, i) => (
+                  <div key={i} className="flex gap-3 rounded-2xl border border-border bg-background/70 p-4 text-sm leading-6 text-muted-foreground">
+                    <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">{i + 1}</span>
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
             </section>
 
             <section className="rounded-3xl border border-border bg-card p-6">
-              <h2 className="text-xl font-bold text-foreground">三步上手</h2>
-              <ol className="mt-4 space-y-3">
-                {quickStartSteps.map((step) => (
-                  <li key={step} className="rounded-2xl border border-border bg-background/70 p-4 text-sm leading-6 text-muted-foreground">
-                    {step}
-                  </li>
+              <h2 className="text-xl font-bold text-foreground">快速上手</h2>
+              <div className="mt-4 space-y-3">
+                {quickStartSteps.map((step, i) => (
+                  <div key={i} className="flex gap-3 rounded-2xl border border-border bg-background/70 p-4 text-sm leading-6 text-muted-foreground">
+                    <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">{i + 1}</span>
+                    <span>{step}</span>
+                  </div>
                 ))}
-              </ol>
+              </div>
             </section>
 
-            {tool.promptExample && (
+            {promptExamples.length > 0 && (
               <section className="rounded-3xl border border-border bg-card p-6">
                 <h2 className="text-xl font-bold text-foreground">示例提示词</h2>
-                <div className="mt-4 rounded-2xl border border-border bg-muted p-4 text-sm leading-7 text-foreground">
-                  {tool.promptExample}
+                <div className="mt-4 space-y-4">
+                  {promptExamples.map((ex, i) => (
+                    <div key={i} className="rounded-2xl border border-border bg-muted/50 p-4">
+                      <span className="mb-2 inline-block rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">{ex.label}</span>
+                      <pre className="whitespace-pre-wrap text-sm leading-7 text-foreground">{ex.content}</pre>
+                    </div>
+                  ))}
                 </div>
               </section>
             )}
@@ -143,7 +199,36 @@ export default async function ToolDetailPage({
           <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
             <div className="rounded-3xl border border-border bg-card p-6">
               <h2 className="text-xl font-bold text-foreground">工具说明</h2>
-              <p className="mt-3 text-sm leading-6 text-muted-foreground">{tool.description}</p>
+              <div className="mt-4 space-y-3">
+                {tool.description.split('。').filter(Boolean).map((sentence, i) => (
+                  <div key={i} className="flex gap-3 rounded-2xl border border-border bg-background/70 p-4 text-sm leading-6 text-muted-foreground">
+                    <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+                      {i + 1}
+                    </span>
+                    <span>{sentence.trim()}。</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 grid grid-cols-2 gap-3">
+                <div className="rounded-xl bg-muted/50 p-3">
+                  <div className="text-xs text-muted-foreground">价格</div>
+                  <div className="mt-1 text-sm font-medium text-foreground">{pricingLabels[tool.pricing]}</div>
+                </div>
+                <div className="rounded-xl bg-muted/50 p-3">
+                  <div className="text-xs text-muted-foreground">难度</div>
+                  <div className="mt-1 text-sm font-medium text-foreground">{difficultyLabels[tool.difficulty]}</div>
+                </div>
+                <div className="rounded-xl bg-muted/50 p-3">
+                  <div className="text-xs text-muted-foreground">分类</div>
+                  <div className="mt-1 text-sm font-medium text-foreground">{tool.category.name}</div>
+                </div>
+                {tool.recommendationScore && (
+                  <div className="rounded-xl bg-muted/50 p-3">
+                    <div className="text-xs text-muted-foreground">推荐度</div>
+                    <div className="mt-1"><StarRating score={tool.recommendationScore} size="sm" showLabel /></div>
+                  </div>
+                )}
+              </div>
             </div>
             {siblingTools.length > 0 && (
               <div>

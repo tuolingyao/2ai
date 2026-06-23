@@ -197,17 +197,23 @@ async function main() {
     name: 'Trae',
     slug: 'trae',
     tagline: '字节跳动推出的国内首个 AI 原生 IDE，中文开发者免费使用。',
-    description: 'Trae 是字节跳动 2025 年推出的 AI 原生集成开发环境，基于 VS Code 架构，深度融合豆包、DeepSeek 等大模型。它不是在传统编辑器上加 AI 插件，而是把 AI 作为交互核心重新设计的 IDE——支持自然语言对话、全仓库理解、多文件编辑、Agent 自主开发四种模式。核心机制：AI 能读取整个项目上下文（不只是当前文件），理解模块间依赖关系，因此生成的代码更贴合项目风格。与 Cursor 相比：Trae 原生中文界面、国内模型直连、免费使用，但插件生态和稳定性仍在追赶。与 GitHub Copilot 相比：Copilot 是补全工具，Trae 是开发助手——前者帮你写下一行，后者帮你实现一个功能。截至 2026 年已有 600 万注册用户，月活超 100 万，是国内最主流的 AI IDE。',
+    description: 'Trae 是字节跳动推出的 AI 原生集成开发环境，现已升级为 Trae Work CN，提供网页版、桌面版、移动版三端体验。基于 VS Code 架构，深度融合豆包、DeepSeek 等大模型，支持自然语言对话、全仓库理解、多文件编辑、Agent 自主开发四种模式。核心机制：AI 能读取整个项目上下文（不只是当前文件），理解模块间依赖关系，因此生成的代码更贴合项目风格。与 Cursor 相比：Trae 原生中文界面、国内模型直连、免费使用，但插件生态和稳定性仍在追赶。与 GitHub Copilot 相比：Copilot 是补全工具，Trae 是开发助手——前者帮你写下一行，后者帮你实现一个功能。截至 2026 年已有 600 万注册用户，月活超 100 万，是国内最主流的 AI IDE。',
     websiteUrl: 'https://www.trae.cn',
     pricing: ToolPricing.FREEMIUM,
     difficulty: ToolDifficulty.BEGINNER,
-    bestFor: '日常开发：用 Ctrl+K 行内补全，按 Tab 接受，适合写样板代码和函数实现\n项目理解：接手陌生项目时，用对话让 AI 解释目录结构、模块依赖、核心逻辑\n跨文件重构：描述需求让 AI 同时修改多个文件，如"把所有 console.log 换成 logger"\n功能开发：用 Agent 模式描述一个完整需求，AI 分步实现并运行验证\nBug 定位：粘贴报错信息，AI 结合项目上下文定位原因并给出修复方案\n中文开发者：原生中文界面，国内模型直连，无需翻墙',
+    bestFor: '日常开发：用 Ctrl+K 行内补全，按 Tab 接受，适合写样板代码和函数实现\n项目理解：接手陌生项目时，用 Ctrl+L 对话让 AI 解释目录结构、模块依赖、核心逻辑\n跨文件重构：描述需求让 AI 同时修改多个文件，如"把所有 console.log 换成 logger"\n功能开发：用 Agent 模式描述一个完整需求，AI 分步实现并运行验证\nBug 定位：粘贴报错信息，AI 结合项目上下文定位原因并给出修复方案\n团队协作：Trae Work CN 支持团队共享上下文和代码规范，多人协作更高效',
     notFor: '生产环境直接部署 AI 生成代码：AI 会编造不存在的 API、忽略边界条件，必须人工审查\n强依赖特定 IDE 插件的老项目：部分 VS Code 插件兼容性需验证，企业级插件可能不支持\n团队协作要求强权限管控的场景：Trae 的协作和权限能力仍在完善，不如 JetBrains 系列\n对代码质量要求极高的场景：AI 生成代码风格统一但可能缺乏深度优化，性能关键路径仍需人工',
-    whyRecommended: '国内唯一免费且原生支持中文的 AI 原生 IDE，学习成本低于 Cursor。底层基于 VS Code，原有插件、配置、快捷键可直接迁移，零切换成本。Agent 模式能理解整个项目结构，适合从"补全代码"升级到"描述需求让 AI 实现"。适合作为中文开发者接触 AI 编程的第一站——免费、中文、上手快。局限：复杂项目（10万行+）的上下文理解仍有损耗，关键改动建议拆分小任务。',
-    quickStart: '1. 访问 trae.cn 下载对应系统安装包（支持 Windows/Mac/Linux），安装后用字节账号或手机号登录\n2. 打开一个现有项目（建议先用非生产项目练手），等待 Trae 完成代码库索引（右下角会显示进度）\n3. 按 Ctrl+L 打开右侧 AI 对话面板，输入"帮我理解这个项目的目录结构和核心模块"，观察 AI 如何基于项目上下文回答\n4. 选中一段代码，右键选择"解释这段代码"或"重构这段代码"，对比 AI 的修改建议\n5. 按 Ctrl+K 在编辑器内触发行内补全，写完函数签名后按 Tab 接受 AI 建议的函数体\n6. 尝试 Agent 模式：输入"给这个项目加一个用户登录页面，使用现有 UI 组件"，观察 AI 如何分步实现\n7. 关键习惯：每次 AI 生成代码后，用 git diff 审查改动，不要直接接受——AI 会编造 API、忽略类型，人工审查是必须的\n8. 进阶：在项目根目录创建 .trae/rules/project_rules.md，写入项目规范，AI 会遵循这些规则生成代码',
+    whyRecommended: '国内唯一免费且原生支持中文的 AI 原生 IDE，学习成本低于 Cursor。底层基于 VS Code，原有插件、配置、快捷键可直接迁移，零切换成本。Agent 模式能理解整个项目结构，适合从"补全代码"升级到"描述需求让 AI 实现"。Trae Work CN 新增网页版和移动版，随时随地写代码。适合作为中文开发者接触 AI 编程的第一站——免费、中文、上手快。局限：复杂项目（10万行+）的上下文理解仍有损耗，关键改动建议拆分小任务。',
+    quickStart: '1. 访问 trae.cn 下载桌面版安装包（支持 Windows/Mac/Linux），或直接使用网页版（无需安装）\n2. 用字节账号或手机号登录，打开一个现有项目（建议先用非生产项目练手）\n3. 等待 Trae 完成代码库索引（右下角会显示进度），索引完成后 AI 才能理解项目上下文\n4. 按 Ctrl+L 打开右侧 AI 对话面板，输入"帮我理解这个项目的目录结构和核心模块"，观察 AI 如何基于项目上下文回答\n5. 选中一段代码，右键选择"解释这段代码"或"重构这段代码"，对比 AI 的修改建议\n6. 按 Ctrl+K 在编辑器内触发行内补全，写完函数签名后按 Tab 接受 AI 建议的函数体\n7. 尝试 Agent 模式：输入"给这个项目加一个用户登录页面，使用现有 UI 组件"，观察 AI 如何分步实现\n8. 关键习惯：每次 AI 生成代码后，用 git diff 审查改动，不要直接接受——AI 会编造 API、忽略类型，人工审查是必须的',
     promptExample: '【场景1：理解陌生项目】\n"这是一个 Next.js 项目，帮我分析 src/app 目录下的路由结构，列出每个页面的功能，并指出哪些页面可能有性能问题。要求：按路由层级展示，每个页面说明功能、数据来源、潜在问题"\n\n【场景2：功能开发（Agent 模式）】\n"在 src/components/admin/ 下新建一个用户管理表格组件，要求：\n- 支持分页（每页20条）、按创建时间排序、按邮箱搜索\n- 使用 shadcn/ui 的 Table 组件，风格参考 src/components/admin/scenes-page.tsx\n- 调用 /api/admin/users 接口，接口返回 { data: User[], total: number }\n- 加载状态用 Skeleton，错误状态显示重试按钮\n- 完成后运行 pnpm lint 验证"\n\n【场景3：Bug 修复】\n"用户反馈 /tools 页面在手机上布局错乱。帮我检查 src/app/tools/page.tsx 的响应式样式，定位问题并修复。修复后说明原因和修改点。"\n\n【场景4：代码审查】\n"审查 src/app/api/admin/tools/route.ts 这个文件，重点检查：权限校验是否完整、输入验证是否充分、错误处理是否覆盖、是否有 SQL 注入风险。按严重程度列出问题。"',
     seoTitle: 'Trae AI IDE — 字节跳动出品的国内首个 AI 原生编辑器（免费）',
     seoDescription: 'Trae 是字节跳动推出的 AI 原生 IDE，基于 VS Code，融合豆包和 DeepSeek 大模型。支持自然语言生成代码、全仓库理解、Agent 自主开发，中文开发者免费使用。600万注册用户，国内最主流的 AI 编程工具。',
+    recommendationScore: 5,
+    screenshotUrls: [
+      'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Trae%20AI%20IDE%20screenshot%20showing%20code%20editor%20with%20AI%20chat%20panel%20on%20the%20right%20side%2C%20dark%20theme%2C%20clean%20modern%20interface&image_size=landscape_16_9',
+      'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Trae%20AI%20IDE%20Agent%20mode%20showing%20multi-file%20editing%20with%20diff%20review%20panel%2C%20dark%20theme&image_size=landscape_16_9',
+      'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Trae%20Work%20CN%20web%20version%20browser%20based%20code%20editor%20with%20AI%20assistant%2C%20modern%20UI&image_size=landscape_16_9',
+    ],
   }
 
   const aiTools = new Map<string, { id: string }>()
@@ -275,6 +281,8 @@ async function main() {
         publishStatus: PublishStatus.PUBLISHED,
         seoTitle: traeToolSeed.seoTitle,
         seoDescription: traeToolSeed.seoDescription,
+        recommendationScore: traeToolSeed.recommendationScore,
+        screenshotUrls: traeToolSeed.screenshotUrls,
       },
       create: {
         categoryId: traeCategory.id,
@@ -295,6 +303,8 @@ async function main() {
         publishStatus: PublishStatus.PUBLISHED,
         seoTitle: traeToolSeed.seoTitle,
         seoDescription: traeToolSeed.seoDescription,
+        recommendationScore: traeToolSeed.recommendationScore,
+        screenshotUrls: traeToolSeed.screenshotUrls,
       },
     })
     aiTools.set(traeToolSeed.slug, traeTool)

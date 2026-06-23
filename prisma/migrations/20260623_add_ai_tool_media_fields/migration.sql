@@ -1,0 +1,2 @@
+ALTER TABLE "ai_tools" ADD COLUMN IF NOT EXISTS "recommendationScore" INTEGER;
+ALTER TABLE "ai_tools" ADD COLUMN IF NOT EXISTS "screenshotUrls" TEXT[] DEFAULT ARRAY[]::TEXT[];

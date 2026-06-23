@@ -309,6 +309,8 @@ model AiTool {
   publishStatus  PublishStatus  @default(DRAFT)
   seoTitle       String?
   seoDescription String?
+  recommendationScore Int?
+  screenshotUrls String[]
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
 

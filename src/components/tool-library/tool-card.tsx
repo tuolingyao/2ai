@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { ToolDifficulty, ToolPricing } from '@prisma/client'
+import { StarRating } from './star-rating'
 
 const pricingLabels: Record<ToolPricing, string> = {
   FREE: '免费',
@@ -22,6 +23,7 @@ interface ToolCardProps {
     pricing: ToolPricing
     difficulty: ToolDifficulty
     category?: { name: string } | null
+    recommendationScore?: number | null
   }
 }
 
@@ -54,7 +56,11 @@ export function ToolCard({ tool }: ToolCardProps) {
         </p>
 
         <div className="mt-auto flex items-center justify-between pt-6">
-          <span className="h-px flex-1 bg-border" />
+          {tool.recommendationScore ? (
+            <StarRating score={tool.recommendationScore} size="sm" />
+          ) : (
+            <span className="h-px flex-1 bg-border" />
+          )}
           <span className="ml-4 text-sm font-semibold text-primary transition group-hover:translate-x-1">
             查看详情 →
           </span>
