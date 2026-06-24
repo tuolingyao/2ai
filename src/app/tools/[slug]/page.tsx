@@ -5,7 +5,6 @@ import { prisma } from '@/lib/prisma'
 import { ToolCard } from '@/components/tool-library/tool-card'
 import { RelatedScenes } from '@/components/tool-library/related-scenes'
 import { StarRating } from '@/components/tool-library/star-rating'
-import { ToolScreenshots } from '@/components/tool-library/tool-screenshots'
 
 const pricingLabels = {
   FREE: '免费',
@@ -137,12 +136,6 @@ export default async function ToolDetailPage({
           </div>
         </div>
       </section>
-
-      {tool.screenshotUrls.length > 0 && (
-        <section className="mx-auto max-w-7xl px-4 pt-8">
-          <ToolScreenshots urls={tool.screenshotUrls} name={tool.name} />
-        </section>
-      )}
 
       <main className="px-4 py-12 sm:py-16">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[minmax(0,1fr)_360px]">

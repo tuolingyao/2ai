@@ -192,34 +192,6 @@ async function main() {
     'trae': '/images/tools/trae-logo.png',
   }
 
-  const toolScreenshots: Record<string, string[]> = {
-    'notion-ai': ['/images/tools/notion-ai-1.png', '/images/tools/notion-ai-2.png', '/images/tools/notion-ai-3.png'],
-    'xiezuocat': ['/images/tools/xiezuocat-1.png', '/images/tools/xiezuocat-2.png', '/images/tools/xiezuocat-3.png'],
-    'grammarly': ['/images/tools/grammarly-1.png', '/images/tools/grammarly-2.png', '/images/tools/grammarly-3.png'],
-    'perplexity': [],
-    'consensus': ['/images/tools/consensus-1.png', '/images/tools/consensus-2.png'],
-    'elicit': [],
-    'microsoft-copilot': ['/images/tools/microsoft-copilot-1.png', '/images/tools/microsoft-copilot-2.png', '/images/tools/microsoft-copilot-3.png'],
-    'wps-ai': ['/images/tools/wps-ai-1.png', '/images/tools/wps-ai-2.png', '/images/tools/wps-ai-3.png'],
-    'otter-ai': ['/images/tools/otter-ai-1.png', '/images/tools/otter-ai-2.png', '/images/tools/otter-ai-3.png'],
-    'claude-code': ['/images/tools/claude-code-1.png', '/images/tools/claude-code-2.png', '/images/tools/claude-code-3.png'],
-    'cursor': ['/images/tools/cursor-1.png', '/images/tools/cursor-2.png', '/images/tools/cursor-3.png'],
-    'github-copilot': ['/images/tools/github-copilot-1.png', '/images/tools/github-copilot-2.png', '/images/tools/github-copilot-3.png'],
-    'midjourney': [],
-    'canva-ai': ['/images/tools/canva-ai-1.png', '/images/tools/canva-ai-2.png', '/images/tools/canva-ai-3.png'],
-    'krea': [],
-    'runway': ['/images/tools/runway-1.png', '/images/tools/runway-2.png', '/images/tools/runway-3.png'],
-    'descript': ['/images/tools/descript-1.png', '/images/tools/descript-2.png', '/images/tools/descript-3.png'],
-    'elevenlabs': ['/images/tools/elevenlabs-1.png', '/images/tools/elevenlabs-2.png', '/images/tools/elevenlabs-3.png'],
-    'mem': ['/images/tools/mem-1.png', '/images/tools/mem-2.png', '/images/tools/mem-3.png'],
-    'tana': ['/images/tools/tana-1.png', '/images/tools/tana-2.png', '/images/tools/tana-3.png'],
-    'readwise-reader': ['/images/tools/readwise-reader-1.png', '/images/tools/readwise-reader-2.png', '/images/tools/readwise-reader-3.png'],
-    'zapier-ai': ['/images/tools/zapier-ai-1.png', '/images/tools/zapier-ai-2.png', '/images/tools/zapier-ai-3.png'],
-    'dify': ['/images/tools/dify-1.png', '/images/tools/dify-2.png', '/images/tools/dify-3.png'],
-    'make': [],
-    'trae': ['/images/tools/trae-1.png', '/images/tools/trae-2.png', '/images/tools/trae-3.png'],
-  }
-
   const aiToolSeeds = [
     { categorySlug: 'writing-content', name: 'Notion AI', slug: 'notion-ai', tagline: '在文档与知识库中完成写作和整理。', description: 'Notion AI 适合在已有笔记、项目文档和团队知识库中直接改写、总结和生成内容。它的优势是贴近文档工作流，减少复制粘贴。', websiteUrl: 'https://www.notion.so/product/ai', pricing: ToolPricing.FREEMIUM, difficulty: ToolDifficulty.BEGINNER, bestFor: '文档写作、会议纪要整理、知识库内容改写', notFor: '需要复杂事实核验或高强度长文创作的任务', whyRecommended: '适合把 AI 嵌入日常文档流程，学习成本低。', quickStart: '1. 打开一篇已有文档\n2. 选中段落让 AI 总结或改写\n3. 保存可复用的写作模板' },
     { categorySlug: 'writing-content', name: '秘塔写作猫', slug: 'xiezuocat', tagline: '中文写作校对与润色助手。', description: '秘塔写作猫适合中文文本纠错、润色、续写和风格优化。它对中文表达和病句检查较友好。', websiteUrl: 'https://xiezuocat.com', pricing: ToolPricing.FREEMIUM, difficulty: ToolDifficulty.BEGINNER, bestFor: '中文文章润色、错别字检查、表达优化', notFor: '复杂多轮内容策划或深度研究', whyRecommended: '中文写作场景上手快，适合内容发布前检查。', quickStart: '1. 粘贴待检查文本\n2. 查看纠错与润色建议\n3. 保留符合自己语气的修改' },
@@ -316,7 +288,6 @@ async function main() {
     seoTitle: 'Trae Work CN — 字节跳动 AI 工作助手，办公与开发双模式，三端免费',
     seoDescription: 'Trae Work CN 是字节跳动推出的 AI 工作助手，提供 Work 办公模式和 Code 开发模式，覆盖网页版、桌面版、移动端三端。支持 Skills 技能封装、自动化任务、免费国内一线大模型、自定义模型接入。2000万用户，国内 AI 工具用户量最大的产品之一。',
     recommendationScore: 5,
-    screenshotUrls: toolScreenshots['trae'],
   }
 
   const aiTools = new Map<string, { id: string }>()
@@ -341,7 +312,6 @@ async function main() {
         sortOrder: i,
         publishStatus: PublishStatus.PUBLISHED,
         logoUrl: toolLogos[seed.slug],
-        screenshotUrls: toolScreenshots[seed.slug] ?? [],
       },
       create: {
         categoryId: category.id,
@@ -359,7 +329,6 @@ async function main() {
         sortOrder: i,
         publishStatus: PublishStatus.PUBLISHED,
         logoUrl: toolLogos[seed.slug],
-        screenshotUrls: toolScreenshots[seed.slug] ?? [],
       },
     })
     aiTools.set(seed.slug, tool)
@@ -389,7 +358,6 @@ async function main() {
         seoTitle: traeToolSeed.seoTitle,
         seoDescription: traeToolSeed.seoDescription,
         recommendationScore: traeToolSeed.recommendationScore,
-        screenshotUrls: traeToolSeed.screenshotUrls,
         logoUrl: toolLogos['trae'],
       },
       create: {
@@ -412,7 +380,6 @@ async function main() {
         seoTitle: traeToolSeed.seoTitle,
         seoDescription: traeToolSeed.seoDescription,
         recommendationScore: traeToolSeed.recommendationScore,
-        screenshotUrls: traeToolSeed.screenshotUrls,
         logoUrl: toolLogos['trae'],
       },
     })
