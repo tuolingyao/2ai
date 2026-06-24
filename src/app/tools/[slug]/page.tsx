@@ -13,9 +13,14 @@ const pricingLabels = {
 } as const
 
 const difficultyLabels = {
-  BEGINNER: '入门',
-  INTERMEDIATE: '进阶',
-  ADVANCED: '高级',
+  BEGINNER: '入手难度 低',
+  INTERMEDIATE: '入手难度 中',
+  ADVANCED: '入手难度 高',
+} as const
+
+const accessRegionLabels = {
+  DOMESTIC: '境内可用',
+  OVERSEAS: '境外可用',
 } as const
 
 export async function generateMetadata({
@@ -88,6 +93,7 @@ export default async function ToolDetailPage({
       bestFor: true,
       pricing: true,
       difficulty: true,
+      accessRegion: true,
       category: { select: { name: true } },
       recommendationScore: true,
       logoUrl: true,
@@ -105,12 +111,13 @@ export default async function ToolDetailPage({
       <section className="ink-gradient rice-paper border-b border-border px-4 py-14 sm:py-20">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_360px] lg:items-end">
           <div>
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="seal-stamp rounded-sm bg-background/70 text-xs">{tool.category.name}</span>
-              <span className="rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground">{pricingLabels[tool.pricing]}</span>
-              <span className="rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground">{difficultyLabels[tool.difficulty]}</span>
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="seal-stamp rounded-sm bg-background/70 text-sm">{tool.category.name}</span>
+              <span className="rounded-full bg-muted px-3 py-1 text-sm text-muted-foreground">{pricingLabels[tool.pricing]}</span>
+              <span className="rounded-full bg-muted px-3 py-1 text-sm text-muted-foreground">{difficultyLabels[tool.difficulty]}</span>
+              <span className="rounded-full bg-primary/10 px-3 py-1 text-sm text-primary">{accessRegionLabels[tool.accessRegion]}</span>
               {tool.recommendationScore && (
-                <span className="flex items-center gap-1 rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground">
+                <span className="flex items-center gap-1 rounded-full bg-muted px-3 py-1 text-sm text-muted-foreground">
                   <StarRating score={tool.recommendationScore} size="sm" />
                   {tool.recommendationScore}/5
                 </span>
@@ -124,16 +131,14 @@ export default async function ToolDetailPage({
             </div>
             <p className="mt-5 max-w-3xl text-lg leading-8 text-muted-foreground">{tool.tagline}</p>
           </div>
-          <div className="rounded-3xl border border-border bg-card/90 p-6">
-            <a
-              href={tool.websiteUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex w-full justify-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:-translate-y-0.5 hover:bg-primary/90"
-            >
-              访问官网
-            </a>
-          </div>
+          <a
+            href={tool.websiteUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex w-full justify-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:-translate-y-0.5 hover:bg-primary/90"
+          >
+            访问官网
+          </a>
         </div>
       </section>
 

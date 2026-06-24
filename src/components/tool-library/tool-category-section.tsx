@@ -1,4 +1,4 @@
-import type { ToolDifficulty, ToolPricing } from '@prisma/client'
+import type { ToolAccessRegion, ToolDifficulty, ToolPricing } from '@prisma/client'
 import { ToolCard } from './tool-card'
 
 interface ToolCategorySectionProps {
@@ -13,6 +13,7 @@ interface ToolCategorySectionProps {
       bestFor: string
       pricing: ToolPricing
       difficulty: ToolDifficulty
+      accessRegion: ToolAccessRegion
       category?: { name: string } | null
       logoUrl?: string | null
     }[]

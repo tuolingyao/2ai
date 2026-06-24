@@ -1,4 +1,4 @@
-import { PrismaClient, PublishStatus, ToolDifficulty, ToolPricing } from '@prisma/client'
+import { PrismaClient, PublishStatus, ToolAccessRegion, ToolDifficulty, ToolPricing } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
@@ -12,6 +12,8 @@ const categories = [
   { name: '个人知识管理', slug: 'knowledge-management', description: '适合读书笔记、资料沉淀、知识库整理与长期复用。' },
   { name: '自动化与 Agent', slug: 'automation-agent', description: '适合工作流自动化、内部工具、客服助手与任务代理。' },
 ]
+
+const domesticToolSlugs = new Set(['xiezuocat', 'wps-ai', 'trae'])
 
 const toolLogos: Record<string, string> = {
   'notion-ai': '/images/tools/notion-ai-logo.png',
@@ -166,6 +168,7 @@ async function main() {
         websiteUrl,
         pricing,
         difficulty,
+        accessRegion: domesticToolSlugs.has(slug) ? ToolAccessRegion.DOMESTIC : ToolAccessRegion.OVERSEAS,
         bestFor,
         whyRecommended: '该工具在对应任务中成熟度高、学习成本可控，适合作为首批上手选择。',
         quickStart: '1. 打开官网注册账号\n2. 选择一个真实任务输入需求\n3. 根据输出继续追问和修正',
@@ -185,6 +188,7 @@ async function main() {
         websiteUrl,
         pricing,
         difficulty,
+        accessRegion: domesticToolSlugs.has(slug) ? ToolAccessRegion.DOMESTIC : ToolAccessRegion.OVERSEAS,
         bestFor,
         whyRecommended: '该工具在对应任务中成熟度高、学习成本可控，适合作为首批上手选择。',
         quickStart: '1. 打开官网注册账号\n2. 选择一个真实任务输入需求\n3. 根据输出继续追问和修正',
@@ -211,6 +215,7 @@ async function main() {
         websiteUrl: traeTool.websiteUrl,
         pricing: traeTool.pricing,
         difficulty: traeTool.difficulty,
+        accessRegion: ToolAccessRegion.DOMESTIC,
         bestFor: traeTool.bestFor,
         notFor: traeTool.notFor,
         whyRecommended: traeTool.whyRecommended,
@@ -233,6 +238,7 @@ async function main() {
         websiteUrl: traeTool.websiteUrl,
         pricing: traeTool.pricing,
         difficulty: traeTool.difficulty,
+        accessRegion: ToolAccessRegion.DOMESTIC,
         bestFor: traeTool.bestFor,
         notFor: traeTool.notFor,
         whyRecommended: traeTool.whyRecommended,

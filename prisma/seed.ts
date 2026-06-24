@@ -1,5 +1,5 @@
 // Prisma seed 脚本 — 插入测试数据
-import { PrismaClient, UserRole, PublishStatus, StageType, TaxonomyType, ToolPricing, ToolDifficulty } from '@prisma/client'
+import { PrismaClient, UserRole, PublishStatus, StageType, TaxonomyType, ToolPricing, ToolDifficulty, ToolAccessRegion } from '@prisma/client'
 import { hash } from 'bcryptjs'
 
 const prisma = new PrismaClient()
@@ -164,6 +164,8 @@ async function main() {
     toolCategories.set(category.slug, category)
   }
 
+  const domesticToolSlugs = new Set(['xiezuocat', 'wps-ai', 'trae'])
+
   const toolLogos: Record<string, string> = {
     'notion-ai': '/images/tools/notion-ai-logo.png',
     'xiezuocat': '/images/tools/xiezuocat-logo.png',
@@ -305,6 +307,7 @@ async function main() {
         websiteUrl: seed.websiteUrl,
         pricing: seed.pricing,
         difficulty: seed.difficulty,
+        accessRegion: domesticToolSlugs.has(seed.slug) ? ToolAccessRegion.DOMESTIC : ToolAccessRegion.OVERSEAS,
         bestFor: seed.bestFor,
         notFor: seed.notFor,
         whyRecommended: seed.whyRecommended,
@@ -322,6 +325,7 @@ async function main() {
         websiteUrl: seed.websiteUrl,
         pricing: seed.pricing,
         difficulty: seed.difficulty,
+        accessRegion: domesticToolSlugs.has(seed.slug) ? ToolAccessRegion.DOMESTIC : ToolAccessRegion.OVERSEAS,
         bestFor: seed.bestFor,
         notFor: seed.notFor,
         whyRecommended: seed.whyRecommended,
@@ -347,6 +351,7 @@ async function main() {
         websiteUrl: traeToolSeed.websiteUrl,
         pricing: traeToolSeed.pricing,
         difficulty: traeToolSeed.difficulty,
+        accessRegion: ToolAccessRegion.DOMESTIC,
         bestFor: traeToolSeed.bestFor,
         notFor: traeToolSeed.notFor,
         whyRecommended: traeToolSeed.whyRecommended,
@@ -369,6 +374,7 @@ async function main() {
         websiteUrl: traeToolSeed.websiteUrl,
         pricing: traeToolSeed.pricing,
         difficulty: traeToolSeed.difficulty,
+        accessRegion: ToolAccessRegion.DOMESTIC,
         bestFor: traeToolSeed.bestFor,
         notFor: traeToolSeed.notFor,
         whyRecommended: traeToolSeed.whyRecommended,

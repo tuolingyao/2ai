@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import type { ToolDifficulty, ToolPricing } from '@prisma/client'
+import type { ToolAccessRegion, ToolDifficulty, ToolPricing } from '@prisma/client'
 import { StarRating } from './star-rating'
 
 const pricingLabels: Record<ToolPricing, string> = {
@@ -15,6 +15,11 @@ const difficultyLabels: Record<ToolDifficulty, string> = {
   ADVANCED: '高级',
 }
 
+const accessRegionLabels: Record<ToolAccessRegion, string> = {
+  DOMESTIC: '境内可用',
+  OVERSEAS: '境外可用',
+}
+
 interface ToolCardProps {
   tool: {
     name: string
@@ -23,6 +28,7 @@ interface ToolCardProps {
     bestFor: string
     pricing: ToolPricing
     difficulty: ToolDifficulty
+    accessRegion: ToolAccessRegion
     category?: { name: string } | null
     recommendationScore?: number | null
     logoUrl?: string | null
@@ -44,6 +50,9 @@ export function ToolCard({ tool }: ToolCardProps) {
           </span>
           <span className="rounded-full border border-border bg-muted px-2.5 py-1 text-xs text-muted-foreground">
             {difficultyLabels[tool.difficulty]}
+          </span>
+          <span className="rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-xs text-primary">
+            {accessRegionLabels[tool.accessRegion]}
           </span>
         </div>
 
