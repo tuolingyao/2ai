@@ -95,25 +95,26 @@ export default async function ToolDetailPage({
       <section className="ink-gradient rice-paper border-b border-border px-4 py-14 sm:py-20">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_360px] lg:items-end">
           <div>
-            <span className="seal-stamp rounded-sm bg-background/70 text-xs">{tool.category.name}</span>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="seal-stamp rounded-sm bg-background/70 text-xs">{tool.category.name}</span>
+              <span className="rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground">{pricingLabels[tool.pricing]}</span>
+              <span className="rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground">{difficultyLabels[tool.difficulty]}</span>
+              {tool.recommendationScore && (
+                <span className="flex items-center gap-1 rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground">
+                  <StarRating score={tool.recommendationScore} size="sm" />
+                  {tool.recommendationScore}/5
+                </span>
+              )}
+            </div>
             <h1 className="mt-6 text-4xl font-black leading-tight text-foreground sm:text-6xl">{tool.name}</h1>
             <p className="mt-5 max-w-3xl text-lg leading-8 text-muted-foreground">{tool.tagline}</p>
-            {tool.recommendationScore && (
-              <div className="mt-4">
-                <StarRating score={tool.recommendationScore} size="md" showLabel />
-              </div>
-            )}
           </div>
           <div className="rounded-3xl border border-border bg-card/90 p-6">
-            <div className="flex flex-wrap gap-2">
-              <span className="rounded-full bg-muted px-3 py-1 text-sm text-muted-foreground">{pricingLabels[tool.pricing]}</span>
-              <span className="rounded-full bg-muted px-3 py-1 text-sm text-muted-foreground">{difficultyLabels[tool.difficulty]}</span>
-            </div>
             <a
               href={tool.websiteUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 inline-flex w-full justify-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:-translate-y-0.5 hover:bg-primary/90"
+              className="inline-flex w-full justify-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:-translate-y-0.5 hover:bg-primary/90"
             >
               访问官网
             </a>
@@ -141,7 +142,6 @@ export default async function ToolDetailPage({
               </div>
             </section>
 
-            {/* 不适合做什么 — 警示卡片 */}
             {notForItems.length > 0 && (
               <section className="rounded-3xl border border-border bg-card p-6">
                 <h2 className="text-xl font-bold text-foreground">不适合做什么</h2>
@@ -208,26 +208,6 @@ export default async function ToolDetailPage({
                     <span>{sentence.trim()}。</span>
                   </div>
                 ))}
-              </div>
-              <div className="mt-4 grid grid-cols-2 gap-3">
-                <div className="rounded-xl bg-muted/50 p-3">
-                  <div className="text-xs text-muted-foreground">价格</div>
-                  <div className="mt-1 text-sm font-medium text-foreground">{pricingLabels[tool.pricing]}</div>
-                </div>
-                <div className="rounded-xl bg-muted/50 p-3">
-                  <div className="text-xs text-muted-foreground">难度</div>
-                  <div className="mt-1 text-sm font-medium text-foreground">{difficultyLabels[tool.difficulty]}</div>
-                </div>
-                <div className="rounded-xl bg-muted/50 p-3">
-                  <div className="text-xs text-muted-foreground">分类</div>
-                  <div className="mt-1 text-sm font-medium text-foreground">{tool.category.name}</div>
-                </div>
-                {tool.recommendationScore && (
-                  <div className="rounded-xl bg-muted/50 p-3">
-                    <div className="text-xs text-muted-foreground">推荐度</div>
-                    <div className="mt-1"><StarRating score={tool.recommendationScore} size="sm" showLabel /></div>
-                  </div>
-                )}
               </div>
             </div>
             {siblingTools.length > 0 && (

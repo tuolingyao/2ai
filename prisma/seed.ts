@@ -196,23 +196,74 @@ async function main() {
     categorySlug: 'coding-development',
     name: 'Trae',
     slug: 'trae',
-    tagline: '字节跳动推出的国内首个 AI 原生 IDE，中文开发者免费使用。',
-    description: 'Trae 是字节跳动推出的 AI 原生集成开发环境，现已升级为 Trae Work CN，提供网页版、桌面版、移动版三端体验。基于 VS Code 架构，深度融合豆包、DeepSeek 等大模型，支持自然语言对话、全仓库理解、多文件编辑、Agent 自主开发四种模式。核心机制：AI 能读取整个项目上下文（不只是当前文件），理解模块间依赖关系，因此生成的代码更贴合项目风格。与 Cursor 相比：Trae 原生中文界面、国内模型直连、免费使用，但插件生态和稳定性仍在追赶。与 GitHub Copilot 相比：Copilot 是补全工具，Trae 是开发助手——前者帮你写下一行，后者帮你实现一个功能。截至 2026 年已有 600 万注册用户，月活超 100 万，是国内最主流的 AI IDE。',
+    tagline: '字节跳动推出的 AI 工作助手，覆盖办公与开发，三端免费使用。',
+    description: 'Trae Work CN 是字节跳动推出的新一代 AI 工作助手，覆盖办公与开发两大场景，提供网页版、桌面版和移动端三端体验。核心架构是 Work 模式与 Code 模式双模式：Work 模式面向办公、内容生产、资料整理和任务执行；Code 模式面向开发、代码理解和工程任务。两种模式共享同一套 AI 能力底层，用户可按任务自由切换。Trae Work CN 内置 Skills 技能体系，支持把固定工作流封装为可复用的技能，也支持自动化任务配置，让周期性、重复性流程自动执行。模型能力方面，免费接入豆包、DeepSeek 等国内一线大模型，提供国内额度最高的免费使用额度，同时支持自定义模型接入，适合团队和个人进阶需求。截至 2026 年，Trae 全球用户已超 2000 万，是国内 AI 工具用户量最大的产品之一。',
     websiteUrl: 'https://www.trae.cn',
     pricing: ToolPricing.FREEMIUM,
     difficulty: ToolDifficulty.BEGINNER,
-    bestFor: '日常开发：用 Ctrl+K 行内补全，按 Tab 接受，适合写样板代码和函数实现\n项目理解：接手陌生项目时，用 Ctrl+L 对话让 AI 解释目录结构、模块依赖、核心逻辑\n跨文件重构：描述需求让 AI 同时修改多个文件，如"把所有 console.log 换成 logger"\n功能开发：用 Agent 模式描述一个完整需求，AI 分步实现并运行验证\nBug 定位：粘贴报错信息，AI 结合项目上下文定位原因并给出修复方案\n团队协作：Trae Work CN 支持团队共享上下文和代码规范，多人协作更高效',
-    notFor: '生产环境直接部署 AI 生成代码：AI 会编造不存在的 API、忽略边界条件，必须人工审查\n强依赖特定 IDE 插件的老项目：部分 VS Code 插件兼容性需验证，企业级插件可能不支持\n团队协作要求强权限管控的场景：Trae 的协作和权限能力仍在完善，不如 JetBrains 系列\n对代码质量要求极高的场景：AI 生成代码风格统一但可能缺乏深度优化，性能关键路径仍需人工',
-    whyRecommended: '国内唯一免费且原生支持中文的 AI 原生 IDE，学习成本低于 Cursor。底层基于 VS Code，原有插件、配置、快捷键可直接迁移，零切换成本。Agent 模式能理解整个项目结构，适合从"补全代码"升级到"描述需求让 AI 实现"。Trae Work CN 新增网页版和移动版，随时随地写代码。适合作为中文开发者接触 AI 编程的第一站——免费、中文、上手快。局限：复杂项目（10万行+）的上下文理解仍有损耗，关键改动建议拆分小任务。',
-    quickStart: '1. 访问 trae.cn 下载桌面版安装包（支持 Windows/Mac/Linux），或直接使用网页版（无需安装）\n2. 用字节账号或手机号登录，打开一个现有项目（建议先用非生产项目练手）\n3. 等待 Trae 完成代码库索引（右下角会显示进度），索引完成后 AI 才能理解项目上下文\n4. 按 Ctrl+L 打开右侧 AI 对话面板，输入"帮我理解这个项目的目录结构和核心模块"，观察 AI 如何基于项目上下文回答\n5. 选中一段代码，右键选择"解释这段代码"或"重构这段代码"，对比 AI 的修改建议\n6. 按 Ctrl+K 在编辑器内触发行内补全，写完函数签名后按 Tab 接受 AI 建议的函数体\n7. 尝试 Agent 模式：输入"给这个项目加一个用户登录页面，使用现有 UI 组件"，观察 AI 如何分步实现\n8. 关键习惯：每次 AI 生成代码后，用 git diff 审查改动，不要直接接受——AI 会编造 API、忽略类型，人工审查是必须的',
-    promptExample: '【场景1：理解陌生项目】\n"这是一个 Next.js 项目，帮我分析 src/app 目录下的路由结构，列出每个页面的功能，并指出哪些页面可能有性能问题。要求：按路由层级展示，每个页面说明功能、数据来源、潜在问题"\n\n【场景2：功能开发（Agent 模式）】\n"在 src/components/admin/ 下新建一个用户管理表格组件，要求：\n- 支持分页（每页20条）、按创建时间排序、按邮箱搜索\n- 使用 shadcn/ui 的 Table 组件，风格参考 src/components/admin/scenes-page.tsx\n- 调用 /api/admin/users 接口，接口返回 { data: User[], total: number }\n- 加载状态用 Skeleton，错误状态显示重试按钮\n- 完成后运行 pnpm lint 验证"\n\n【场景3：Bug 修复】\n"用户反馈 /tools 页面在手机上布局错乱。帮我检查 src/app/tools/page.tsx 的响应式样式，定位问题并修复。修复后说明原因和修改点。"\n\n【场景4：代码审查】\n"审查 src/app/api/admin/tools/route.ts 这个文件，重点检查：权限校验是否完整、输入验证是否充分、错误处理是否覆盖、是否有 SQL 注入风险。按严重程度列出问题。"',
-    seoTitle: 'Trae AI IDE — 字节跳动出品的国内首个 AI 原生编辑器（免费）',
-    seoDescription: 'Trae 是字节跳动推出的 AI 原生 IDE，基于 VS Code，融合豆包和 DeepSeek 大模型。支持自然语言生成代码、全仓库理解、Agent 自主开发，中文开发者免费使用。600万注册用户，国内最主流的 AI 编程工具。',
+    bestFor: 'Work 模式办公：用自然语言完成文档整理、内容生产、资料调研和任务执行，不需要写代码\nWork 模式内容生产：把公众号选题、大纲、正文、标题的完整流程交给 AI 分步执行，人工只做判断和校准\nCode 模式开发：从需求描述到代码实现、测试、部署的完整开发流程，AI 自主推进\nSkills 技能封装：把重复工作流（如周报生成、会议纪要整理）封装为可复用技能，一键调用\n自动化任务：把周期性重复流程（如每日数据汇总、定时内容发布）配置为自动化，无需人工值守\n三端协同：网页版快速处理轻量任务、桌面版深度办公和开发、移动端随时查看和简单操作\n多模型选择：需要对比不同模型输出质量，或需要国内大模型稳定访问的场景\n自定义模型接入：团队有私有模型或需要特定模型能力的进阶用户',
+    notFor: '完全不愿配置工作流或技能的人：Trae 的价值在于把流程沉淀为可复用资产，如果每次从零开始，效率提升有限\n把 AI 输出直接当最终结果的人：Work 模式和 Code 模式的输出都需要人工确认，尤其是涉及数据准确性和业务决策的内容\n移动端复杂长时间编辑：移动端适合查看和简单操作，不适合长文档写作、复杂代码编辑或工程开发\n高风险任务完全无人值守：自动化任务不适合涉及资金安全、合规审批、关键业务决策等高风险场景\n自定义模型接入无技术基础：接入私有模型需要理解模型配置、API 调用和数据边界，不适合完全无技术背景的用户\n跨平台插件强依赖：部分 VS Code 插件在 Code 模式下兼容性需验证，企业级特定插件可能不完全支持',
+    whyRecommended: 'Work / Code 双模式覆盖办公与开发两大核心场景，一个产品解决两类需求，降低工具切换成本。三端覆盖（网页/桌面/移动）让使用场景不受设备限制，网页版 5 秒启动处理轻量任务，桌面版深度处理复杂工作，移动端随时响应。Skills 技能体系让经验可复用——把一次做好的流程封装成技能，后续一键调用，团队内可共享。自动化任务让重复流程沉淀为系统能力，周期性任务自动执行，减少人工值守。免费使用国内一线大模型（豆包、DeepSeek 等），国内额度最高，可用模型数量最多，无需额外付费即可体验多模型能力。支持自定义模型接入，适合有私有模型需求的团队和个人进阶用户。界面设计获得开发者广泛好评，从 VS Code 迁移零学习成本。局限：复杂项目（10万行+）的上下文理解仍有损耗，关键改动建议拆分小任务；Work 模式的办公自动化需要一定的流程设计能力才能发挥最大价值。',
+    quickStart: '1. 选择入口：访问 trae.cn，选择网页版（无需安装，5秒启动）、桌面版（Windows/Mac/Linux，功能最全）或移动端（iOS/Android，随时查看）\n2. 选择模式：Work 模式用于办公、内容生产、资料整理；Code 模式用于开发、代码理解、工程任务\n3. 选择模型：根据任务选择豆包、DeepSeek 等国内一线大模型，免费额度充足，可切换对比不同模型输出\n4. 使用或创建 Skill：从技能市场选择已有技能（如周报生成、会议纪要整理），或把自己的固定流程封装为新技能\n5. 配置自动化：把周期性重复任务（如每日数据汇总、定时内容检查）配置为自动化流程，设定触发条件和执行步骤\n6. 接入自定义模型（可选）：在设置中配置私有模型 API，扩展模型能力边界，适合团队特定需求\n7. 结果检查：Work 模式输出需确认数据准确性和业务合理性；Code 模式输出需运行测试和代码审查\n8. 迭代优化：根据使用反馈调整技能参数、优化自动化流程、切换更适合的模型',
+    promptExample: `【场景1：Work 模式 — 公众号内容生产】
+"用 Work 模式帮我完成一篇公众号文章的生产流程：
+- 第一步：基于我的账号定位（AI工具测评），用 AI 生成 3 个选题并说明每个选题的目标读者和核心价值
+- 第二步：我选择选题后，用 AI 整理相关素材（工具官网、用户评价、对比数据）
+- 第三步：基于素材生成文章大纲，每段说明"说什么+为什么说"
+- 第四步：按大纲逐段生成正文，每段生成后我确认或要求修改
+- 第五步：生成 3 个候选标题，说明每个标题的吸引点
+- 第六步：输出完整的发布检查清单（标题、封面、摘要、标签）
+要求：每步输出后暂停，等我确认后再进行下一步"
+
+【场景2：Work 模式 — 资料整理与调研报告】
+"帮我整理一份关于'AI 编程工具市场'的调研报告：
+- 收集当前主流的 5 款 AI 编程工具（Trae、Cursor、GitHub Copilot、Windsurf、Claude Code）
+- 每款工具说明：核心能力、价格、适用人群、主要局限
+- 对比表格：功能、价格、模型支持、三端覆盖、社区生态
+- 输出一份 2 页以内的执行摘要，适合给团队决策参考
+要求：标注信息来源，不确定的地方明确说明"
+
+【场景3：Code 模式 — 从需求到代码实现】
+"用 Code 模式完成一个用户登录功能：
+- 需求：在现有 Next.js 项目中添加邮箱+密码登录，使用 NextAuth.js
+- 第一步：分析现有项目结构，确定集成方案
+- 第二步：安装依赖并配置 NextAuth provider
+- 第三步：创建登录页面 UI（使用现有 shadcn/ui 组件风格）
+- 第四步：实现登录 API 路由和数据库用户模型
+- 第五步：添加登录状态检查和路由保护
+- 第六步：运行测试验证整个流程
+要求：每步完成后运行 pnpm lint 和 pnpm build 确保不破坏现有功能"
+
+【场景4：Skills — 封装周报生成技能】
+"帮我把周报生成流程封装为一个 Skill：
+- 输入：本周完成的任务列表（来自项目管理工具或手动输入）
+- 处理：按"已完成/进行中/阻塞/下周计划"分类整理
+- 输出：结构化周报文档，包含数据亮点、问题说明、下周目标
+- 附加：生成一份给上级的 3 分钟汇报版本
+要求：封装为可复用 Skill，下次只需输入任务列表即可一键生成"
+
+【场景5：自动化 — 定时内容检查】
+"配置一个自动化任务：
+- 触发条件：每天上午 9 点
+- 执行内容：检查我的公众号后台数据（阅读量、点赞、分享），与前一日对比
+- 输出：生成一份数据简报，标注异常波动和趋势变化
+- 通知：把简报发送到我的工作邮箱
+要求：先手动运行一次验证流程正确，再开启定时执行"
+
+【场景6：自定义模型 — 团队私有模型接入】
+"帮我配置 Trae 接入我们团队的私有模型：
+- 模型信息：基于 Llama 3 微调的行业专用模型，部署在内网服务器
+- 配置需求：在 Trae 的模型设置中添加自定义模型 endpoint
+- 测试：用行业术语测试模型理解能力，对比与通用模型的差异
+- 使用场景：团队内部文档生成、行业报告撰写
+要求：说明配置步骤和注意事项，标注数据安全边界"`,
+    seoTitle: 'Trae Work CN — 字节跳动 AI 工作助手，办公与开发双模式，三端免费',
+    seoDescription: 'Trae Work CN 是字节跳动推出的 AI 工作助手，提供 Work 办公模式和 Code 开发模式，覆盖网页版、桌面版、移动端三端。支持 Skills 技能封装、自动化任务、免费国内一线大模型、自定义模型接入。2000万用户，国内 AI 工具用户量最大的产品之一。',
     recommendationScore: 5,
     screenshotUrls: [
-      'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Trae%20AI%20IDE%20screenshot%20showing%20code%20editor%20with%20AI%20chat%20panel%20on%20the%20right%20side%2C%20dark%20theme%2C%20clean%20modern%20interface&image_size=landscape_16_9',
-      'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Trae%20AI%20IDE%20Agent%20mode%20showing%20multi-file%20editing%20with%20diff%20review%20panel%2C%20dark%20theme&image_size=landscape_16_9',
-      'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Trae%20Work%20CN%20web%20version%20browser%20based%20code%20editor%20with%20AI%20assistant%2C%20modern%20UI&image_size=landscape_16_9',
+      'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Trae%20Work%20CN%20web%20interface%20showing%20Work%20mode%20with%20AI%20chat%20panel%20document%20editing%20dark%20theme%20modern%20UI&image_size=landscape_16_9',
+      'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Trae%20Work%20CN%20Code%20mode%20IDE%20with%20SOLO%20agent%20coding%20automation%20multi-file%20editing%20dark%20theme&image_size=landscape_16_9',
+      'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Trae%20Work%20CN%20mobile%20app%20interface%20AI%20assistant%20chat%20clean%20modern%20design&image_size=landscape_16_9',
     ],
   }
 
