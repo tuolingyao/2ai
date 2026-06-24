@@ -14,6 +14,7 @@ interface ToolCategorySectionProps {
       pricing: ToolPricing
       difficulty: ToolDifficulty
       category?: { name: string } | null
+      logoUrl?: string | null
     }[]
   }
 }

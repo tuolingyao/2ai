@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import type { ToolDifficulty, ToolPricing } from '@prisma/client'
 import { StarRating } from './star-rating'
@@ -24,6 +25,7 @@ interface ToolCardProps {
     difficulty: ToolDifficulty
     category?: { name: string } | null
     recommendationScore?: number | null
+    logoUrl?: string | null
   }
 }
 
@@ -45,9 +47,14 @@ export function ToolCard({ tool }: ToolCardProps) {
           </span>
         </div>
 
-        <h3 className="mt-5 line-clamp-1 text-xl font-bold text-foreground group-hover:text-primary">
-          {tool.name}
-        </h3>
+        <div className="mt-5 flex items-center gap-2.5">
+          {tool.logoUrl && (
+            <Image src={tool.logoUrl} alt={`${tool.name} Logo`} width={24} height={24} className="h-6 w-6 flex-shrink-0 rounded object-contain" />
+          )}
+          <h3 className="line-clamp-1 text-xl font-bold text-foreground group-hover:text-primary">
+            {tool.name}
+          </h3>
+        </div>
         <p className="mt-3 line-clamp-2 text-sm leading-6 text-muted-foreground">
           {tool.tagline}
         </p>

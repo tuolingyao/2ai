@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
@@ -26,7 +27,7 @@ export async function generateMetadata({
   const { slug } = await params
   const tool = await prisma.aiTool.findUnique({
     where: { slug },
-    select: { name: true, tagline: true, seoTitle: true, seoDescription: true, publishStatus: true },
+    select: { name: true, tagline: true, seoTitle: true, seoDescription: true, publishStatus: true, logoUrl: true },
   })
 
   if (!tool || tool.publishStatus !== 'PUBLISHED') return { title: '工具未找到' }
@@ -79,9 +80,19 @@ export default async function ToolDetailPage({
       publishStatus: 'PUBLISHED',
       NOT: { id: tool.id },
     },
-    include: { category: { select: { name: true } } },
     orderBy: { sortOrder: 'asc' },
     take: 4,
+    select: {
+      name: true,
+      slug: true,
+      tagline: true,
+      bestFor: true,
+      pricing: true,
+      difficulty: true,
+      category: { select: { name: true } },
+      recommendationScore: true,
+      logoUrl: true,
+    },
   })
 
   const bestForItems = parseItems(tool.bestFor)
@@ -106,7 +117,12 @@ export default async function ToolDetailPage({
                 </span>
               )}
             </div>
-            <h1 className="mt-6 text-4xl font-black leading-tight text-foreground sm:text-6xl">{tool.name}</h1>
+            <div className="mt-6 flex items-center gap-3">
+              {tool.logoUrl && (
+                <Image src={tool.logoUrl} alt={`${tool.name} Logo`} width={36} height={36} className="h-9 w-9 flex-shrink-0 rounded object-contain" />
+              )}
+              <h1 className="text-4xl font-black leading-tight text-foreground sm:text-6xl">{tool.name}</h1>
+            </div>
             <p className="mt-5 max-w-3xl text-lg leading-8 text-muted-foreground">{tool.tagline}</p>
           </div>
           <div className="rounded-3xl border border-border bg-card/90 p-6">

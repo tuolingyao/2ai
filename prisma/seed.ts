@@ -164,6 +164,62 @@ async function main() {
     toolCategories.set(category.slug, category)
   }
 
+  const toolLogos: Record<string, string> = {
+    'notion-ai': 'https://logo.clearbit.com/www.notion.so',
+    'xiezuocat': 'https://logo.clearbit.com/xiezuocat.com',
+    'grammarly': 'https://logo.clearbit.com/www.grammarly.com',
+    'perplexity': 'https://logo.clearbit.com/www.perplexity.ai',
+    'consensus': 'https://logo.clearbit.com/consensus.app',
+    'elicit': 'https://logo.clearbit.com/elicit.com',
+    'microsoft-copilot': 'https://logo.clearbit.com/www.microsoft.com',
+    'wps-ai': 'https://logo.clearbit.com/ai.wps.cn',
+    'otter-ai': 'https://logo.clearbit.com/otter.ai',
+    'claude-code': 'https://logo.clearbit.com/www.anthropic.com',
+    'cursor': 'https://logo.clearbit.com/www.cursor.com',
+    'github-copilot': 'https://logo.clearbit.com/github.com',
+    'midjourney': 'https://logo.clearbit.com/www.midjourney.com',
+    'canva-ai': 'https://logo.clearbit.com/www.canva.com',
+    'krea': 'https://logo.clearbit.com/www.krea.ai',
+    'runway': 'https://logo.clearbit.com/runwayml.com',
+    'descript': 'https://logo.clearbit.com/www.descript.com',
+    'elevenlabs': 'https://logo.clearbit.com/elevenlabs.io',
+    'mem': 'https://logo.clearbit.com/mem.ai',
+    'tana': 'https://logo.clearbit.com/tana.inc',
+    'readwise-reader': 'https://logo.clearbit.com/readwise.io',
+    'zapier-ai': 'https://logo.clearbit.com/zapier.com',
+    'dify': 'https://logo.clearbit.com/dify.ai',
+    'make': 'https://logo.clearbit.com/www.make.com',
+    'trae': 'https://logo.clearbit.com/www.trae.cn',
+  }
+
+  const toolScreenshots: Record<string, string[]> = {
+    'notion-ai': ['https://www.notion.com/front-static/meta/custom-agents-og.png'],
+    'xiezuocat': ['https://uranus-static.oss-accelerate.aliyuncs.com/xiezuocat/upgredBG.png'],
+    'grammarly': ['https://static.grammarly.com/assets/files/6c884c17e874eab417163b965cf84ea2/open-graph-image-24-default.png'],
+    'perplexity': [],
+    'consensus': ['https://consensus.app/images/og-default.png'],
+    'elicit': ['https://framerusercontent.com/images/s7irwYwOOfdSFu6EPduaB8EDsIg.png'],
+    'microsoft-copilot': ['https://copilot.microsoft.com/static/cmc/images/meta-image.jpg'],
+    'wps-ai': ['https://personal-act.wpscdn.cn/operations-fe/wps-ai/files/05.Oe8soGhu.png'],
+    'otter-ai': ['https://cdn.prod.website-files.com/618e9316785b3582a5178502/67dd5a945aeed07e329d4e10_og-image-otter-optim.jpg'],
+    'claude-code': ['https://cdn.sanity.io/images/4zrzovbb/claude-com/6c36adaaf60ecdde313a93ad255eef573ea4de97-1200x630.jpg?rect=0,2,1200,627&w=1200&h=627&fit=crop'],
+    'cursor': ['https://cursor.com/social-image/default'],
+    'github-copilot': ['https://images.ctfassets.net/8aevphvgewt8/5IdZ8KizWhMOGixAmVSw0g/f81f5f263a88eabe5d3e102300d44a88/github-copilot-social-img.png'],
+    'midjourney': [],
+    'canva-ai': ['https://content-management-files.canva.com/c37135f6-6d9a-4920-b659-4f5e12698b8d/og-image-global-1200x630.jpg'],
+    'krea': ['https://s.krea.ai/KreaOpenGraph2.webp'],
+    'runway': ['https://runwayml.com/twitter-image.png?twitter-image.1066gbuqgwttu.png'],
+    'descript': ['https://cdn.builder.io/api/v1/image/assets%2Ffcea5005d671451e9b07839c893228d0%2Fb1cf2c175fbe4a028dff4622ee1ce727'],
+    'elevenlabs': ['https://elevenlabs.io/cover.png'],
+    'mem': ['https://storage.googleapis.com/mem-public-assets/sq-f.jpg'],
+    'tana': ['https://tana.inc/opengraph-image/default?93ca01e1efb16d88'],
+    'readwise-reader': ['https://readwise-assets.s3.amazonaws.com/static/images/reader/OG-Reader.9fe9ca92418f.jpg'],
+    'zapier-ai': ['https://res.cloudinary.com/zapier-media/image/upload/q_auto/f_auto/v1776210704/Governance/og-image-ai_mroshs.png'],
+    'dify': ['https://framerusercontent.com/assets/wuOqS9XwiT7WjyMd0HAinp7aWo.png'],
+    'make': ['https://images.ctfassets.net/un655fb9wln6/1EVkH7bZmWSxq6gG8GR3rd/f51b402ee9e3a36ce85019a40b7ca89d/image__18_.png'],
+    'trae': ['https://p9-arcosite.byteimg.com/tos-cn-i-goo7wpa0wc/f5cd1485db3b4f328599afe28a1b54d9~tplv-goo7wpa0wc-topic.png'],
+  }
+
   const aiToolSeeds = [
     { categorySlug: 'writing-content', name: 'Notion AI', slug: 'notion-ai', tagline: '在文档与知识库中完成写作和整理。', description: 'Notion AI 适合在已有笔记、项目文档和团队知识库中直接改写、总结和生成内容。它的优势是贴近文档工作流，减少复制粘贴。', websiteUrl: 'https://www.notion.so/product/ai', pricing: ToolPricing.FREEMIUM, difficulty: ToolDifficulty.BEGINNER, bestFor: '文档写作、会议纪要整理、知识库内容改写', notFor: '需要复杂事实核验或高强度长文创作的任务', whyRecommended: '适合把 AI 嵌入日常文档流程，学习成本低。', quickStart: '1. 打开一篇已有文档\n2. 选中段落让 AI 总结或改写\n3. 保存可复用的写作模板' },
     { categorySlug: 'writing-content', name: '秘塔写作猫', slug: 'xiezuocat', tagline: '中文写作校对与润色助手。', description: '秘塔写作猫适合中文文本纠错、润色、续写和风格优化。它对中文表达和病句检查较友好。', websiteUrl: 'https://xiezuocat.com', pricing: ToolPricing.FREEMIUM, difficulty: ToolDifficulty.BEGINNER, bestFor: '中文文章润色、错别字检查、表达优化', notFor: '复杂多轮内容策划或深度研究', whyRecommended: '中文写作场景上手快，适合内容发布前检查。', quickStart: '1. 粘贴待检查文本\n2. 查看纠错与润色建议\n3. 保留符合自己语气的修改' },
@@ -260,11 +316,7 @@ async function main() {
     seoTitle: 'Trae Work CN — 字节跳动 AI 工作助手，办公与开发双模式，三端免费',
     seoDescription: 'Trae Work CN 是字节跳动推出的 AI 工作助手，提供 Work 办公模式和 Code 开发模式，覆盖网页版、桌面版、移动端三端。支持 Skills 技能封装、自动化任务、免费国内一线大模型、自定义模型接入。2000万用户，国内 AI 工具用户量最大的产品之一。',
     recommendationScore: 5,
-    screenshotUrls: [
-      'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Trae%20Work%20CN%20web%20interface%20showing%20Work%20mode%20with%20AI%20chat%20panel%20document%20editing%20dark%20theme%20modern%20UI&image_size=landscape_16_9',
-      'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Trae%20Work%20CN%20Code%20mode%20IDE%20with%20SOLO%20agent%20coding%20automation%20multi-file%20editing%20dark%20theme&image_size=landscape_16_9',
-      'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Trae%20Work%20CN%20mobile%20app%20interface%20AI%20assistant%20chat%20clean%20modern%20design&image_size=landscape_16_9',
-    ],
+    screenshotUrls: toolScreenshots['trae'],
   }
 
   const aiTools = new Map<string, { id: string }>()
@@ -272,7 +324,7 @@ async function main() {
     const seed = aiToolSeeds[i]
     const category = toolCategories.get(seed.categorySlug)
     if (!category) throw new Error(`缺少工具分类: ${seed.categorySlug}`)
-    const tool = await prisma.aiTool.upsert({ 
+    const tool = await prisma.aiTool.upsert({
       where: { slug: seed.slug },
       update: {
         categoryId: category.id,
@@ -288,6 +340,8 @@ async function main() {
         quickStart: seed.quickStart,
         sortOrder: i,
         publishStatus: PublishStatus.PUBLISHED,
+        logoUrl: toolLogos[seed.slug],
+        screenshotUrls: toolScreenshots[seed.slug] ?? [],
       },
       create: {
         categoryId: category.id,
@@ -304,6 +358,8 @@ async function main() {
         quickStart: seed.quickStart,
         sortOrder: i,
         publishStatus: PublishStatus.PUBLISHED,
+        logoUrl: toolLogos[seed.slug],
+        screenshotUrls: toolScreenshots[seed.slug] ?? [],
       },
     })
     aiTools.set(seed.slug, tool)
@@ -334,6 +390,7 @@ async function main() {
         seoDescription: traeToolSeed.seoDescription,
         recommendationScore: traeToolSeed.recommendationScore,
         screenshotUrls: traeToolSeed.screenshotUrls,
+        logoUrl: toolLogos['trae'],
       },
       create: {
         categoryId: traeCategory.id,
@@ -356,6 +413,7 @@ async function main() {
         seoDescription: traeToolSeed.seoDescription,
         recommendationScore: traeToolSeed.recommendationScore,
         screenshotUrls: traeToolSeed.screenshotUrls,
+        logoUrl: toolLogos['trae'],
       },
     })
     aiTools.set(traeToolSeed.slug, traeTool)
