@@ -1,49 +1,45 @@
-# 任务：工具 Logo 陪名称 + 截图替换为官网主题图
+# 任务：修复 Logo 和截图本地化（seed 数据 + 截图下载）
 
-## 目标
-1. Logo 展示在工具名称旁边（小图），不占大图位置
-2. 大图位置用各工具官网首页的主题图/英雄图替代占位符
+## 问题
+Logo 文件已下载到 `public/images/tools/`，但：
+1. seed-tools.ts 和 seed.ts 的 toolLogos 仍用 `logo.clearbit.com` 外部链接
+2. 截图文件未下载到本地，toolScreenshots 仍用 `og:image` 外部链接
+3. 测试文件 test-logo.png 和 test-screenshot.png 应删除
 
 ## 范围
 
-### 1. Logo 陪名称展示
-- [ ] 详情页 Hero 区：Logo 紧邻工具名称，尺寸约 32-40px
-- [ ] 工具卡片：Logo 紧邻工具名称，尺寸约 24px
-- [ ] Logo 为空时不显示，不影响布局
-- [ ] Logo 使用 `tool.logoUrl` 字段
+### 1. 更新 seed 数据的 Logo 路径
+- [ ] `seed-tools.ts` 的 `toolLogos` 全部改为 `/images/tools/{slug}-logo.png`
+- [ ] `seed.ts` 的 `toolLogos` 同步更新
 
-### 2. 截图替换为官网主题图
-- [ ] 收集 25 个工具官网首页的主题图 URL
-- [ ] 更新 `seed-tools.ts` 中所有工具的 `screenshotUrls`
-- [ ] 更新 `seed.ts` 中所有工具的 `screenshotUrls`
-- [ ] 移除所有占位图 URL（trae-api-cn.mchost.guru 开头的）
-- [ ] 每个工具至少 1 张主题图，优先选官网首页英雄区/产品展示区的大图
+### 2. 下载官网首页大图到本地
+用 Playwright 逐个访问 25 个工具官网，提取首页大图并下载：
+- [ ] 访问官网首页，提取 `<img>` 标签
+- [ ] 按尺寸排序，优先选宽 ≥ 600px 的大图
+- [ ] 下载前 3 张，保存为 `public/images/tools/{slug}-1.png`、`-2.png`、`-3.png`
+- [ ] 不足 3 张的按实际数量保存
+- [ ] 无大图的工具，screenshotUrls 设为空数组
 
-### 3. 截图组件调整
-- [ ] 如果只有 1 张图，不显示缩略图切换，直接展示大图
-- [ ] 如果有多张图，保持现有轮播逻辑
-- [ ] 图片数量不足时不强制补齐三张，仅展示已有
-- [ ] 无可用大图时，隐藏整个截图模块（不展示空位或占位图）
+### 3. 更新 seed 数据的截图路径
+- [ ] `seed-tools.ts` 的 `toolScreenshots` 全部改为 `/images/tools/` 本地路径
+- [ ] `seed.ts` 的 `toolScreenshots` 同步更新
 
-## 收集方式
-- 用 WebSearch + WebFetch 访问每个工具官网
-- 提取首页主题图/英雄图的 URL
-- 如果官网无可用大图，`screenshotUrls` 设为空数组，截图模块自动隐藏
+### 4. 清理
+- [ ] 删除 `public/images/tools/test-logo.png`
+- [ ] 删除 `public/images/tools/test-screenshot.png`
+- [ ] 更新 `next.config.ts`，移除不再需要的外部图片域名
 
-## 验收标准
-- [ ] 详情页 Logo 紧邻工具名称
-- [ ] 工具卡片 Logo 紧邻工具名称
-- [ ] 无占位图 URL（trae-api-cn.mchost.guru 开头的全部移除）
-- [ ] 每个工具至少 1 张真实主题图
+### 5. 验证
 - [ ] `pnpm lint` 通过
 - [ ] `pnpm build` 通过
-- [ ] docs/ 目录完整
 
-## 验证命令
-```bash
-pnpm lint
-pnpm build
-```
+## 验收标准
+- [ ] `toolLogos` 无 `logo.clearbit.com` 链接
+- [ ] `toolScreenshots` 无外部链接（全部本地路径或空数组）
+- [ ] `public/images/tools/` 有各工具的首页大图文件
+- [ ] 无 test-logo.png / test-screenshot.png
+- [ ] `pnpm lint` 通过
+- [ ] `pnpm build` 通过
 
 ## 禁止
 - 不改 API、认证、权限逻辑
